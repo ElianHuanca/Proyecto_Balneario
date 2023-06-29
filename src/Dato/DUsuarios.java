@@ -6,9 +6,13 @@
 package Dato;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import proyecto_balneario.SqlConnection;
+import utils.DateString;
 
 /**
  *
@@ -22,14 +26,14 @@ public class DUsuarios {
         connection = new SqlConnection("postgres", "huanca1962", "127.0.0.1", "5432", "balnearioDB");
     }
 
-    public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException {
+    public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
         String query = "INSERT INTO usuarios(ci,nombre,fecha_nacimiento,email,password,rol)"
                 + "values(?,?,?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setString(1, ci);
         ps.setString(2, nombre);
-        ps.setString(3, fecha_nacimiento);
+        ps.setDate(3, DateString.StringToDateSQL(fecha_nacimiento));
         ps.setString(4, email);
         ps.setString(5, password);
         ps.setString(6, rol);
@@ -41,14 +45,15 @@ public class DUsuarios {
         }
     }
 
-    public void modificar(int id,String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException {
+    public void modificar(int id,String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
         String query = "UPDATE usuarios SET ci=?, nombre=?, fecha_nacimiento=?, email=?, password=?, rol=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setString(1, ci);
         ps.setString(2, nombre);
-        ps.setString(3, fecha_nacimiento);
+        //ps.setString(3, fecha_nacimiento);
+        ps.setDate(3, DateString.StringToDateSQL(fecha_nacimiento));
         ps.setString(4, email);
         ps.setString(5, password);
         ps.setString(6, rol);
@@ -73,12 +78,44 @@ public class DUsuarios {
         }
     }
 
-    public List<String[]> listar() {
-        return null;
+    public List<String[]> listar() throws SQLException {
+        List<String[]> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM usuarios";
+        PreparedStatement ps = connection.connect().prepareStatement(query);
+        ResultSet set = ps.executeQuery();
+        while(set.next()) {
+            usuarios.add(new String[] {
+                String.valueOf(set.getInt("id")),
+                set.getString("ci"),
+                set.getString("nombre"),
+                set.getString("fecha_nacimiento"),
+                set.getString("email"),
+                set.getString("password"),                
+                set.getString("rol")
+            });
+        }
+        return usuarios;
     }
 
-    public String[] ver() {
-        return null;
+    public String[] ver(int id) throws SQLException {
+        String[] usuario = null;
+        String query = "SELECT * FROM usuarios WHERE id=?";
+        PreparedStatement ps = connection.connect().prepareStatement(query);
+        ps.setInt(1, id);
+                
+        ResultSet set = ps.executeQuery();
+        if(set.next()) {
+            usuario = new String[] {
+                String.valueOf(set.getInt("id")),
+                set.getString("ci"),
+                set.getString("nombre"),
+                set.getString("fecha_nacimiento"),
+                set.getString("email"),
+                set.getString("password"),                
+                set.getString("rol")
+            };
+        }        
+        return usuario;
     }
 
     public void desconectar() {

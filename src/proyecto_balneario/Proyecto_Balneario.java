@@ -5,9 +5,13 @@
  */
 package proyecto_balneario;
 
+import Negocio.NUsuarios;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +26,7 @@ public class Proyecto_Balneario {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        try {
+        /*try {
             SqlConnection sqlConnection
                     = new SqlConnection("postgres", "huanca1962", "127.0.0.1", "5432", "balnearioDB");
 
@@ -33,8 +37,33 @@ public class Proyecto_Balneario {
             
         } catch (SQLException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE,null,ex);
+        }*/
+        usuario();
+    }
+    
+    public static void usuario() {
+        NUsuarios nu = new NUsuarios();
+        List<String> usuario = new ArrayList<String>();
+        /*usuario.add("9648312");
+        usuario.add("Elian Huanca");
+        usuario.add("2000-05-02");
+        usuario.add("huancacori@gmail.com");
+        usuario.add("123456");
+        usuario.add("Administrador");*/
+        
+        usuario.add("9648307");
+        usuario.add("Diana Paniagua");
+        usuario.add("1999-08-17");
+        usuario.add("diana@gmail.com");
+        usuario.add("123456");
+        usuario.add("Administrador");
+        try {
+            nu.guardar(usuario);                        
+        } catch (SQLException ex) {
+            Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 }
