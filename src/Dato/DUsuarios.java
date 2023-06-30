@@ -123,5 +123,4 @@ public class DUsuarios {
             connection.closeConnection();
         }
     }
-
 }

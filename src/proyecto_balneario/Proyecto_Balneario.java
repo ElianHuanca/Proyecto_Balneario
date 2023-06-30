@@ -5,6 +5,8 @@
  */
 package proyecto_balneario;
 
+import ConnectionCore.MailVerificationThread;
+import Interfaces.IEmailEventListener;
 import Negocio.NUsuarios;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.Email;
 
 /**
  *
@@ -38,7 +41,23 @@ public class Proyecto_Balneario {
         } catch (SQLException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE,null,ex);
         }*/
-        usuario();
+        
+        MailVerificationThread mail = new MailVerificationThread();
+        mail.setEmailEventListener(new IEmailEventListener() {
+            @Override
+            public void onReceiveEmailEvent(List<Email> emails) {
+                for (Email email : emails) {
+                    System.out.println(email);
+                    //interprete(email);
+                }
+            }
+        });
+        
+        Thread thread = new Thread(mail);
+        thread.setName("Mail Verification Thread");
+        thread.start();
+        
+        //usuario();
     }
     
     public static void usuario() {
