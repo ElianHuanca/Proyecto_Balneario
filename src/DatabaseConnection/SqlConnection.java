@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package proyecto_balneario;
+package DatabaseConnection;
 
+import Config.env;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
  *
- * @author ELIAN
+ * @author Elian
  */
 public class SqlConnection {
-
     private static final String DRIVER = "jdbc:postgresql://";
     
     private Connection connection;
@@ -22,18 +22,28 @@ public class SqlConnection {
     private String password;
     private String host;
     private String port;
-    private String name;
+    private String database;
     private String url;
 
-    public SqlConnection(String user, String password, String host, String port, String name) {
+    public SqlConnection() {
+        this.user = env.user;
+        this.password = env.password;
+        this.host = env.host;
+        this.port = env.port;
+        this.database = env.database;
+        
+        this.url = DRIVER + host + ":" + port + "/" + database;
+    }
+    
+    public SqlConnection(String user, String password, String host, String port, String database) {
         this.user = user;
         this.password = password;
         this.host = host;
         this.port = port;
-        this.name=name;
+        this.database=database;
         
-        this.url = DRIVER + host + ":" + port + "/" + name ;//127.0.0.1:5432//tecno_bd
-    }
+        this.url = DRIVER + host + ":" + port + "/" + database ;//127.0.0.1:5432//tecno_bd
+    }   
 
     public Connection connect(){
         try {

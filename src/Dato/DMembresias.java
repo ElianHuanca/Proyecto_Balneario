@@ -16,18 +16,19 @@ import utils.DateString;
 
 /**
  *
- * @author ELIAN
+ * @author Elian
  */
 public class DMembresias {
-    private SqlConnection connection;
+    
+    private final SqlConnection connection;
 
     public DMembresias() {
-        connection = new SqlConnection("postgres", "huanca1962", "127.0.0.1", "5432", "balnearioDB");
+        connection = new SqlConnection();
     }
 
-    public void guardar(String fecha_ini, String fecha_fin, int idUsuario, int idTipoMembresia) throws SQLException, ParseException {
+    public void guardar(String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia ) throws SQLException, ParseException {
         String query = "INSERT INTO membresias(fecha_ini,fecha_fin,idUsuario,idTipoMembresia)"
-                + "values(?,?,?,?,?,?)";
+                + "values(?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);        
         ps.setDate(1, DateString.StringToDateSQL(fecha_ini));
@@ -42,8 +43,8 @@ public class DMembresias {
         }
     }
 
-    public void modificar(int id,String fecha_ini, String fecha_fin, int idUsuario, int idTipoMembresia) throws SQLException, ParseException {
-        String query = "UPDATE membresias SET fecha_ini=?, fecha_fin=?, idUsuario=?, idTipoMembresia=?, password=?, rol=?"
+    public void modificar(int id,String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia) throws SQLException, ParseException {
+        String query = "UPDATE membresias SET fecha_ini=?, fecha_fin=?, idUsuario=?, idTipoMembresia=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);

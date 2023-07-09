@@ -5,7 +5,7 @@
  */
 package Negocio;
 
-import Dato.DUsuarios;
+import Dato.DUsos;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,41 +15,40 @@ import java.util.List;
  *
  * @author Elian
  */
-public class NUsuarios {
+public class NUsos {
+    private final DUsos dUsos;
 
-    private final DUsuarios dUsuarios;
-
-    public NUsuarios(){
-        dUsuarios = new DUsuarios();
+    public NUsos(){
+        dUsos = new DUsos();
     }
     
     public void guardar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.guardar(parametros.get(0), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5));
-        dUsuarios.desconectar();
+        dUsos.guardar(Integer.parseInt(parametros.get(0)),Integer.parseInt(parametros.get(1)));
+        dUsos.desconectar();
     }
     
     public void modificar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5),parametros.get(6));
-        dUsuarios.desconectar();
+        dUsos.modificar(Integer.parseInt(parametros.get(0)), Integer.parseInt(parametros.get(1)),Integer.parseInt(parametros.get(2)));
+        dUsos.desconectar();
     }
     
     public void eliminar(List<String> parametros) throws SQLException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.eliminar(Integer.parseInt(parametros.get(0)));
-        dUsuarios.desconectar();
+        dUsos.eliminar(Integer.parseInt(parametros.get(0)));
+        dUsos.desconectar();
     }
     
     public ArrayList<String[]> listar() throws SQLException{
-        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dUsuarios.listar();
-        dUsuarios.desconectar();
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dUsos.listar();
+        dUsos.desconectar();
         return usuarios;
     }
 }

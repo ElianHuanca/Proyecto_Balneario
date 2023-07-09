@@ -5,14 +5,14 @@
  */
 package Dato;
 
-import DatabaseConnection.Singleton;
+import DatabaseConnection.SqlConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import proyecto_balneario.SqlConnection;
+
 import utils.DateString;
 
 /**
@@ -21,14 +21,10 @@ import utils.DateString;
  */
 public class DUsuarios {
 
-    private SqlConnection connection;
-    Singleton s;
-    PreparedStatement ps;
-    ResultSet rs;
+    private final SqlConnection connection;
 
     public DUsuarios() {
-        //connection = new SqlConnection("postgres", "huanca1962", "127.0.0.1", "5432", "balnearioDB");
-        s = Singleton.getInstancia();
+        connection = new SqlConnection();
     }
 
     public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
@@ -123,6 +119,20 @@ public class DUsuarios {
             };
         }
         return usuario;
+    }
+
+    public int getIdByEmail(String email) throws SQLException {
+        int id = -1;
+        String query = "SELECT * FROM usuarios WHERE email=?";
+        PreparedStatement ps = connection.connect().prepareStatement(query);
+        ps.setString(1, email);
+
+        ResultSet set = ps.executeQuery();
+        if (set.next()) {
+            id = set.getInt("id");
+        }
+
+        return id;
     }
 
     public void desconectar() {

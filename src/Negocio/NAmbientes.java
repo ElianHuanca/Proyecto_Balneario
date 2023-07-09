@@ -5,7 +5,7 @@
  */
 package Negocio;
 
-import Dato.DUsuarios;
+import Dato.DAmbientes;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,41 +15,40 @@ import java.util.List;
  *
  * @author Elian
  */
-public class NUsuarios {
+public class NAmbientes {
+    private final DAmbientes dAmbientes;
 
-    private final DUsuarios dUsuarios;
-
-    public NUsuarios(){
-        dUsuarios = new DUsuarios();
+    public NAmbientes(){
+        dAmbientes = new DAmbientes();
     }
     
     public void guardar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.guardar(parametros.get(0), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5));
-        dUsuarios.desconectar();
+        dAmbientes.guardar(parametros.get(0), Float.parseFloat(parametros.get(1)), Integer.parseInt(parametros.get(2)));
+        dAmbientes.desconectar();
     }
     
     public void modificar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5),parametros.get(6));
-        dUsuarios.desconectar();
+        dAmbientes.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), Float.parseFloat(parametros.get(1)), Integer.parseInt(parametros.get(2)));
+        dAmbientes.desconectar();
     }
     
     public void eliminar(List<String> parametros) throws SQLException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.eliminar(Integer.parseInt(parametros.get(0)));
-        dUsuarios.desconectar();
+        dAmbientes.eliminar(Integer.parseInt(parametros.get(0)));
+        dAmbientes.desconectar();
     }
     
     public ArrayList<String[]> listar() throws SQLException{
-        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dUsuarios.listar();
-        dUsuarios.desconectar();
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dAmbientes.listar();
+        dAmbientes.desconectar();
         return usuarios;
     }
 }

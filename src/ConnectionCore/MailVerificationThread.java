@@ -25,6 +25,11 @@ import utils.Extractor;
  * @author Elian
  */
 public class MailVerificationThread implements Runnable {
+    private final static int PORT_POP = 995;
+    private final static String HOST = "pop.gmail.com";
+    private final static String USER = "huancacori@gmail.com";
+    private final static String PASSWORD = "***********";
+    
 
     private final static int PORT_POP = 110;
     private final static String HOST = "mail.tecnoweb.org.bo";
@@ -36,20 +41,19 @@ public class MailVerificationThread implements Runnable {
     private DataOutputStream output;
 
     private IEmailEventListener emailEventListener;
-
+    
     public IEmailEventListener getEmailEventListener() {
         return emailEventListener;
     }
-
+    
     public void setEmailEventListener(IEmailEventListener emailEventListener) {
         this.emailEventListener = emailEventListener;
     }
-
+    
     public MailVerificationThread() {
         socket = null;
         input = null;
-        output = null;
-    }
+        output = null;        
 
     @Override
     public void run() {
@@ -89,7 +93,6 @@ public class MailVerificationThread implements Runnable {
             }
         }
     }
-
     private void authUser(String email, String password) throws IOException {
         if (socket != null && input != null && output != null) {
             input.readLine();
@@ -102,7 +105,6 @@ public class MailVerificationThread implements Runnable {
             }
         }
     }
-
     private void deleteEmails(int emails) throws IOException {
         for (int i = 1; i <= emails; i++) {
             output.writeBytes(Command.dele(i));
