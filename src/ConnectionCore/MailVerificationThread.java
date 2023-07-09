@@ -30,10 +30,16 @@ public class MailVerificationThread implements Runnable {
     private final static String USER = "huancacori@gmail.com";
     private final static String PASSWORD = "***********";
     
+
+    private final static int PORT_POP = 110;
+    private final static String HOST = "mail.tecnoweb.org.bo";
+    private final static String USER = "grupo06sc";
+    private final static String PASSWORD = "grup006grup006";
+
     private Socket socket;
     private BufferedReader input;
     private DataOutputStream output;
-    
+
     private IEmailEventListener emailEventListener;
     
     public IEmailEventListener getEmailEventListener() {
@@ -48,8 +54,7 @@ public class MailVerificationThread implements Runnable {
         socket = null;
         input = null;
         output = null;        
-    }
-    
+
     @Override
     public void run() {
         while (true) {
@@ -58,12 +63,11 @@ public class MailVerificationThread implements Runnable {
                 socket = new Socket(HOST, PORT_POP);
                 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 output = new DataOutputStream(socket.getOutputStream());
-                System.out.println("************Conexion Establecida************");
-                
+                System.out.println("**************** Conexion establecida *************");
+
                 authUser(USER, PASSWORD);
-                
-                output.writeBytes(Command.stat());
-                int count = getEmailCount(input.readLine());
+
+                int count = getEmailCount();
                 if (count > 0) {
                     emails = getEmails(count);
                     System.out.println(emails);
@@ -74,13 +78,14 @@ public class MailVerificationThread implements Runnable {
                 input.close();
                 output.close();
                 socket.close();
-                
-                System.out.println("************Conexion Cerrada************");
+                System.out.println("************** Conexion cerrada ************");
+
                 if (count > 0) {
                     emailEventListener.onReceiveEmailEvent(emails);
                 }
+
                 Thread.sleep(10000);
-                
+
             } catch (IOException ex) {
                 Logger.getLogger(MailVerificationThread.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
@@ -88,7 +93,6 @@ public class MailVerificationThread implements Runnable {
             }
         }
     }
-    
     private void authUser(String email, String password) throws IOException {
         if (socket != null && input != null && output != null) {
             input.readLine();
@@ -101,31 +105,32 @@ public class MailVerificationThread implements Runnable {
             }
         }
     }
-    
     private void deleteEmails(int emails) throws IOException {
         for (int i = 1; i <= emails; i++) {
             output.writeBytes(Command.dele(i));
         }
     }
-    
-    private int getEmailCount(String line) {
+
+    private int getEmailCount() throws IOException {
+        output.writeBytes(Command.stat());
+        String line = input.readLine();
         String[] data = line.split(" ");
         return Integer.parseInt(data[1]);
     }
-    
+
     private List<Email> getEmails(int count) throws IOException {
         List<Email> emails = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             output.writeBytes(Command.retr(i));
             String text = readMultiline();
             emails.add(Extractor.getEmail(text));
-        }        
+        }
         return emails;
     }
-    
+
     private String readMultiline() throws IOException {
         String lines = "";
-        while (true) {            
+        while (true) {
             String line = input.readLine();
             if (line == null) {
                 throw new IOException("Server no Responde (ocurrio un error al abrir el correo)");

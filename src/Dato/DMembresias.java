@@ -5,13 +5,13 @@
  */
 package Dato;
 
-import DatabaseConnection.SqlConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import proyecto_balneario.SqlConnection;
 import utils.DateString;
 
 /**
@@ -37,8 +37,8 @@ public class DMembresias {
         ps.setInt(4, idTipoMembresia);
 
         if (ps.executeUpdate() == 0) {
-            System.err.println("Class membresias.java dice: "
-                    + "Ocurrio un error al insertar un usuario guardar()");
+            System.err.println("Class DMembresias.java dice: "
+                    + "Ocurrio un error al insertar una membresia guardar()");
             throw new SQLException();
         }
     }
@@ -55,8 +55,8 @@ public class DMembresias {
         ps.setInt(5,id);
 
         if (ps.executeUpdate() == 0) {
-            System.err.println("Class membresias.java dice: "
-                    + "Ocurrio un error al modificar un usuario modificar()");
+            System.err.println("Class DMembresias.java dice: "
+                    + "Ocurrio un error al modificar una membresia modificar()");
             throw new SQLException();
         }
     }
@@ -67,8 +67,8 @@ public class DMembresias {
         ps.setInt(1, id);
         
         if (ps.executeUpdate() == 0) {
-            System.err.println("Class membresias.java dice: "
-                    + "Ocurrio un error al eliminar un usuario eliminar()");
+            System.err.println("Class DMembresias.java dice: "
+                    + "Ocurrio un error al eliminar una membresia eliminar()");
             throw new SQLException();
         }
     }
@@ -80,11 +80,11 @@ public class DMembresias {
         ResultSet set = ps.executeQuery();
         while(set.next()) {
             usuarios.add(new String[] {
-                String.valueOf(set.getInt("id")),                
+                String.valueOf(set.getInt("id")),
                 set.getString("fecha_ini"),
                 set.getString("fecha_fin"),
-                String.valueOf(set.getInt("idUsuario")),
-                String.valueOf(set.getInt("idTipoMembresia")),                                
+                set.getString("idUsuario"),                
+                set.getString("idTipoMembresia")
             });
         }
         return usuarios;
@@ -99,11 +99,11 @@ public class DMembresias {
         ResultSet set = ps.executeQuery();
         if(set.next()) {
             usuario = new String[] {
-                String.valueOf(set.getInt("id")),                
+                String.valueOf(set.getInt("id")),
                 set.getString("fecha_ini"),
                 set.getString("fecha_fin"),
-                String.valueOf(set.getInt("idUsuario")),
-                String.valueOf(set.getInt("idTipoMembresia")),   
+                set.getString("idUsuario"),                
+                set.getString("idTipoMembresia")
             };
         }        
         return usuario;

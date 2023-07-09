@@ -50,6 +50,14 @@ public class Proyecto_Balneario {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 for (Email email: emails) {
                     System.out.println(email);
+        
+        MailVerificationThread mail = new MailVerificationThread();
+        mail.setEmailEventListener(new IEmailEventListener() {
+            @Override
+            public void onReceiveEmailEvent(List<Email> emails) {
+                for (Email email : emails) {
+                    System.out.println(email);
+                    //interprete(email);
                 }
             }
         });
@@ -57,6 +65,11 @@ public class Proyecto_Balneario {
         Thread thread= new Thread(mail);
         thread.setName("Mail Verification Thread");
         thread.start();*/
+        Thread thread = new Thread(mail);
+        thread.setName("Mail Verification Thread");
+        thread.start();
+        
+        //usuario();
     }
     
     public static void usuario() {
