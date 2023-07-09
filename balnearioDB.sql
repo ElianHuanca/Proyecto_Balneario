@@ -33,7 +33,7 @@ CREATE TABLE tiposMembresias(
 	nombre varchar(100),
 	descripcion text,
 	precio FLOAT,
-	tiempoDuracion varchar(50),
+	duracion varchar(50),
 	CONSTRAINT PK_TIPOSMEMBRESIAS PRIMARY KEY(id)
 );
 INSERT INTO tiposMembresias VALUES(1,'BRONCE','10 Entradas',150,'3 Meses');
@@ -67,6 +67,7 @@ INSERT INTO ambientes VALUES(1,'Piscina',500,120);
 INSERT INTO ambientes VALUES(2,'Jacuzzi',150,12);
 INSERT INTO ambientes VALUES(3,'Sauna a Vapor',190,25);
 INSERT INTO ambientes VALUES(4,'Sauna Seco',175,25);
+INSERT INTO ambientes VALUES(5,'Churrasquera',40,10);
 
 CREATE TABLE reservas(
 	id serial not null,
@@ -81,14 +82,54 @@ INSERT INTO reservas VALUES(1,'2023-06-30','Mañana',3);
 INSERT INTO reservas VALUES(2,'2023-07-05','Noche',3);
 
 CREATE TABLE detalle_reservas(
+	id serial not null,
 	idReserva int,
 	idAmbiente int,
-	CONSTRAINT PK_DETALLE_RESERVAS PRIMARY KEY(idReserva,idAmbiente),
+	CONSTRAINT PK_DETALLE_RESERVAS PRIMARY KEY(id),
 	CONSTRAINT FK_RESERVAS FOREIGN KEY(idReserva) REFERENCES reservas(id),
 	CONSTRAINT FK_AMBIENTES FOREIGN KEY(idAmbiente) REFERENCES ambientes(id)
 );
 
-INSERT INTO detalle_reservas VALUES(1,1);
-INSERT INTO detalle_reservas VALUES(1,2);
-INSERT INTO detalle_reservas VALUES(2,3);
-INSERT INTO detalle_reservas VALUES(2,4);
+INSERT INTO detalle_reservas VALUES(1,1,1);
+INSERT INTO detalle_reservas VALUES(2,1,2);
+INSERT INTO detalle_reservas VALUES(3,2,3);
+INSERT INTO detalle_reservas VALUES(4,2,4);
+
+CREATE TABLE productos(
+	id serial not null,
+	nombre varchar(30),
+	--descripcion varchar(100),
+	precio FLOAT,
+	CONSTRAINT PK_PRODUCTOS PRIMARY KEY(id)
+);
+
+INSERT INTO productos VALUES(1,'Bolsa De Carbon',10);
+INSERT INTO productos VALUES(2,'1Lt De Detergente Antigrasas',15);
+INSERT INTO productos VALUES(3,'Ramo De Eucalipto',8);
+INSERT INTO productos VALUES(4,'Garrafon De Gas',18);
+
+CREATE TABLE usos(
+	id serial not null,	
+	fecha Date,
+	cantidad int,
+	idProducto int,
+	idAmbiente int,
+	CONSTRAINT PK_USOS PRIMARY KEY(id),
+	CONSTRAINT FK_PRODUCTOS FOREIGN KEY(idProducto) REFERENCES productos(id),
+	CONSTRAINT FK_AMBIENTES FOREIGN KEY(idAmbiente) REFERENCES ambientes(id)
+);
+
+INSERT INTO usos VALUES(1,'2023-09-07',2,1,5);
+INSERT INTO usos VALUES(2,'2023-09-07',1,2,5);
+INSERT INTO usos VALUES(3,'2023-09-09',4,3,3);
+INSERT INTO usos VALUES(4,'2023-09-09',1,4,3);
+
+
+DROP TABLE usos;
+DROP TABLE detalle_reservas;
+DROP TABLE reservas;
+DROP TABLE ambientes;
+DROP TABLE membresias;
+DROP TABLE tiposMembresias;
+DROP TABLE usuarios;
+
