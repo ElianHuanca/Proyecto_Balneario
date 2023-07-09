@@ -5,7 +5,7 @@
  */
 package Negocio;
 
-import Dato.DUsuarios;
+import Dato.DTiposMembresias;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,41 +15,40 @@ import java.util.List;
  *
  * @author Elian
  */
-public class NUsuarios {
+public class NTiposMembresias {
+    private final DTiposMembresias dTiposMembresias;
 
-    private final DUsuarios dUsuarios;
-
-    public NUsuarios(){
-        dUsuarios = new DUsuarios();
+    public NTiposMembresias(){
+        dTiposMembresias = new DTiposMembresias();
     }
     
     public void guardar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.guardar(parametros.get(0), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5));
-        dUsuarios.desconectar();
+        dTiposMembresias.guardar(parametros.get(0), parametros.get(1), Float.parseFloat(parametros.get(2)), parametros.get(3));
+        dTiposMembresias.desconectar();
     }
     
     public void modificar(List<String> parametros) throws SQLException, ParseException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), parametros.get(3), parametros.get(4),parametros.get(5),parametros.get(6));
-        dUsuarios.desconectar();
+        dTiposMembresias.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Float.parseFloat(parametros.get(3)), parametros.get(4));
+        dTiposMembresias.desconectar();
     }
     
     public void eliminar(List<String> parametros) throws SQLException{
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsuarios.eliminar(Integer.parseInt(parametros.get(0)));
-        dUsuarios.desconectar();
+        dTiposMembresias.eliminar(Integer.parseInt(parametros.get(0)));
+        dTiposMembresias.desconectar();
     }
     
     public ArrayList<String[]> listar() throws SQLException{
-        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dUsuarios.listar();
-        dUsuarios.desconectar();
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dTiposMembresias.listar();
+        dTiposMembresias.desconectar();
         return usuarios;
     }
 }

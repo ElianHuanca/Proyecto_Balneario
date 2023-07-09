@@ -9,9 +9,12 @@ import Interfaces.IEmailEventListener;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.security.sasl.AuthenticationException;
 import utils.Command;
 import utils.Email;
@@ -21,80 +24,116 @@ import utils.Extractor;
  *
  * @author Elian
  */
-public class MailVerificationThread implements Runnable{
+public class MailVerificationThread implements Runnable {
+    private final static int PORT_POP = 995;
+    private final static String HOST = "pop.gmail.com";
+    private final static String USER = "huancacori@gmail.com";
+    private final static String PASSWORD = "***********";
     
     private Socket socket;
     private BufferedReader input;
     private DataOutputStream output;
     
     private IEmailEventListener emailEventListener;
-
+    
     public IEmailEventListener getEmailEventListener() {
         return emailEventListener;
     }
-
+    
     public void setEmailEventListener(IEmailEventListener emailEventListener) {
         this.emailEventListener = emailEventListener;
     }
     
-    public MailVerificationThread(){
-        socket=null;
-        input =null;
-        output=null;        
+    public MailVerificationThread() {
+        socket = null;
+        input = null;
+        output = null;        
     }
-
+    
     @Override
     public void run() {
-        while(true){
-            
+        while (true) {
+            try {
+                List<Email> emails = null;
+                socket = new Socket(HOST, PORT_POP);
+                input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                output = new DataOutputStream(socket.getOutputStream());
+                System.out.println("************Conexion Establecida************");
+                
+                authUser(USER, PASSWORD);
+                
+                output.writeBytes(Command.stat());
+                int count = getEmailCount(input.readLine());
+                if (count > 0) {
+                    emails = getEmails(count);
+                    System.out.println(emails);
+                    deleteEmails(count);
+                }
+                output.writeBytes(Command.quit());
+                input.readLine();
+                input.close();
+                output.close();
+                socket.close();
+                
+                System.out.println("************Conexion Cerrada************");
+                if (count > 0) {
+                    emailEventListener.onReceiveEmailEvent(emails);
+                }
+                Thread.sleep(10000);
+                
+            } catch (IOException ex) {
+                Logger.getLogger(MailVerificationThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MailVerificationThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
-    private void authUser(String email, String password) throws IOException{
-        if(socket!=null && input!=null && output!=null){
+    private void authUser(String email, String password) throws IOException {
+        if (socket != null && input != null && output != null) {
             input.readLine();
             output.writeBytes(Command.user(email));//"USER ronaldorivero3@gmail.com \r\n");
             input.readLine();
             output.writeBytes(Command.pass(password));
-            String message= input.readLine();
-            if(message.contains("-ERR")){
+            String message = input.readLine();
+            if (message.contains("-ERR")) {
                 throw new AuthenticationException();
             }
         }
     }
     
-    private void deleteEmails(int emails) throws IOException{
+    private void deleteEmails(int emails) throws IOException {
         for (int i = 1; i <= emails; i++) {
             output.writeBytes(Command.dele(i));
         }
     }
     
-    private int getEmailCount(String line){
+    private int getEmailCount(String line) {
         String[] data = line.split(" ");
         return Integer.parseInt(data[1]);
     }
     
-    private List<Email> getEmails(int count) throws IOException{
+    private List<Email> getEmails(int count) throws IOException {
         List<Email> emails = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             output.writeBytes(Command.retr(i));
-            String text= readMultiline();
+            String text = readMultiline();
             emails.add(Extractor.getEmail(text));
         }        
         return emails;
     }
     
-    private String readMultiline() throws IOException{
+    private String readMultiline() throws IOException {
         String lines = "";
         while (true) {            
-            String line= input.readLine();
+            String line = input.readLine();
             if (line == null) {
                 throw new IOException("Server no Responde (ocurrio un error al abrir el correo)");
             }
-            if(line.equals(".")){
+            if (line.equals(".")) {
                 break;
             }
-            lines=lines + "\n" + line;
+            lines = lines + "\n" + line;
         }
         return lines;
     }

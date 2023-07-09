@@ -5,6 +5,8 @@
  */
 package proyecto_balneario;
 
+import ConnectionCore.MailVerificationThread;
+import Interfaces.IEmailEventListener;
 import Negocio.NUsuarios;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.Email;
 
 /**
  *
@@ -39,17 +42,32 @@ public class Proyecto_Balneario {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE,null,ex);
         }*/
         usuario();
+        
+        /*MailVerificationThread mail = new MailVerificationThread();
+        mail.setEmailEventListener(new IEmailEventListener() {
+            @Override
+            public void onReceiveEmailEvent(List<Email> emails) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                for (Email email: emails) {
+                    System.out.println(email);
+                }
+            }
+        });
+        
+        Thread thread= new Thread(mail);
+        thread.setName("Mail Verification Thread");
+        thread.start();*/
     }
     
     public static void usuario() {
         NUsuarios nu = new NUsuarios();
-        List<String> usuario = new ArrayList<String>();
-        /*usuario.add("9648312");
+        /*List<String> usuario = new ArrayList<String>();
+        usuario.add("9648312");
         usuario.add("Elian Huanca");
         usuario.add("2000-05-02");
         usuario.add("huancacori@gmail.com");
         usuario.add("123456");
-        usuario.add("Administrador");*/
+        usuario.add("Administrador");
         
         usuario.add("9648307");
         usuario.add("Diana Paniagua");
@@ -57,13 +75,26 @@ public class Proyecto_Balneario {
         usuario.add("diana@gmail.com");
         usuario.add("123456");
         usuario.add("Administrador");
+        
         try {
             nu.guardar(usuario);                        
         } catch (SQLException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        ArrayList<String[]> usuarios = new ArrayList<String[]>();
+        try {
+            usuarios=nu.listar();
+            for (int i = 0; i < usuarios.size(); i++) {
+                for (int j = 0; j < usuarios.get(i).length; j++) {
+                    System.out.print(usuarios.get(i)[j] + " | ");
+                }
+                System.out.println("");
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

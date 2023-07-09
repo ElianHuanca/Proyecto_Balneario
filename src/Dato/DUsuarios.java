@@ -5,13 +5,14 @@
  */
 package Dato;
 
+import DatabaseConnection.SqlConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import proyecto_balneario.SqlConnection;
+
 import utils.DateString;
 
 /**
@@ -20,10 +21,10 @@ import utils.DateString;
  */
 public class DUsuarios {
 
-    private SqlConnection connection;
+    private final SqlConnection connection;
 
     public DUsuarios() {
-        connection = new SqlConnection("postgres", "huanca1962", "127.0.0.1", "5432", "balnearioDB");
+        connection = new SqlConnection();
     }
 
     public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
@@ -45,7 +46,7 @@ public class DUsuarios {
         }
     }
 
-    public void modificar(int id,String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
+    public void modificar(int id, String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
         String query = "UPDATE usuarios SET ci=?, nombre=?, fecha_nacimiento=?, email=?, password=?, rol=?"
                 + "WHERE id=?";
 
@@ -57,7 +58,7 @@ public class DUsuarios {
         ps.setString(4, email);
         ps.setString(5, password);
         ps.setString(6, rol);
-        ps.setInt(7,id);
+        ps.setInt(7, id);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DUsuario.java dice: "
@@ -66,11 +67,11 @@ public class DUsuarios {
         }
     }
 
-    public void eliminar(int id) throws SQLException{
-        String query="DELETE FROM usuarios WHERE id=?";
+    public void eliminar(int id) throws SQLException {
+        String query = "DELETE FROM usuarios WHERE id=?";
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setInt(1, id);
-        
+
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DUsuario.java dice: "
                     + "Ocurrio un error al eliminar un usuario eliminar()");
@@ -83,14 +84,14 @@ public class DUsuarios {
         String query = "SELECT * FROM usuarios";
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ResultSet set = ps.executeQuery();
-        while(set.next()) {
-            usuarios.add(new String[] {
+        while (set.next()) {
+            usuarios.add(new String[]{
                 String.valueOf(set.getInt("id")),
                 set.getString("ci"),
                 set.getString("nombre"),
                 set.getString("fecha_nacimiento"),
                 set.getString("email"),
-                set.getString("password"),                
+                set.getString("password"),
                 set.getString("rol")
             });
         }
@@ -102,20 +103,34 @@ public class DUsuarios {
         String query = "SELECT * FROM usuarios WHERE id=?";
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setInt(1, id);
-                
+
         ResultSet set = ps.executeQuery();
-        if(set.next()) {
-            usuario = new String[] {
+        if (set.next()) {
+            usuario = new String[]{
                 String.valueOf(set.getInt("id")),
                 set.getString("ci"),
                 set.getString("nombre"),
                 set.getString("fecha_nacimiento"),
                 set.getString("email"),
-                set.getString("password"),                
+                set.getString("password"),
                 set.getString("rol")
             };
-        }        
+        }
         return usuario;
+    }
+
+    public int getIdByEmail(String email) throws SQLException {
+        int id = -1;
+        String query = "SELECT * FROM usuarios WHERE email=?";
+        PreparedStatement ps = connection.connect().prepareStatement(query);
+        ps.setString(1, email);
+
+        ResultSet set = ps.executeQuery();
+        if (set.next()) {
+            id = set.getInt("id");
+        }
+
+        return id;
     }
 
     public void desconectar() {
