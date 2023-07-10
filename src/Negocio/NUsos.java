@@ -26,7 +26,7 @@ public class NUsos {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsos.guardar(Integer.parseInt(parametros.get(0)),Integer.parseInt(parametros.get(1)));
+        dUsos.guardar(parametros.get(0),Integer.parseInt(parametros.get(1)),Integer.parseInt(parametros.get(2)),Integer.parseInt(parametros.get(3)));
         dUsos.desconectar();
     }
     
@@ -34,7 +34,7 @@ public class NUsos {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dUsos.modificar(Integer.parseInt(parametros.get(0)), Integer.parseInt(parametros.get(1)),Integer.parseInt(parametros.get(2)));
+        dUsos.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1),Integer.parseInt(parametros.get(2)),Integer.parseInt(parametros.get(3)),Integer.parseInt(parametros.get(4)));
         dUsos.desconectar();
     }
     

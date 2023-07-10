@@ -42,16 +42,8 @@ public class Proyecto_Balneario {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE,null,ex);
         }*/
         usuario();
-        
+
         /*MailVerificationThread mail = new MailVerificationThread();
-        mail.setEmailEventListener(new IEmailEventListener() {
-            @Override
-            public void onReceiveEmailEvent(List<Email> emails) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                for (Email email: emails) {
-                    System.out.println(email);
-        
-        MailVerificationThread mail = new MailVerificationThread();
         mail.setEmailEventListener(new IEmailEventListener() {
             @Override
             public void onReceiveEmailEvent(List<Email> emails) {
@@ -62,16 +54,11 @@ public class Proyecto_Balneario {
             }
         });
         
-        Thread thread= new Thread(mail);
-        thread.setName("Mail Verification Thread");
-        thread.start();*/
         Thread thread = new Thread(mail);
         thread.setName("Mail Verification Thread");
-        thread.start();
-        
-        //usuario();
+        thread.start();*/
     }
-    
+
     public static void usuario() {
         NUsuarios nu = new NUsuarios();
         /*List<String> usuario = new ArrayList<String>();
@@ -96,16 +83,16 @@ public class Proyecto_Balneario {
         } catch (ParseException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-        
+
         ArrayList<String[]> usuarios = new ArrayList<String[]>();
         try {
-            usuarios=nu.listar();
+            usuarios = nu.listar();
             for (int i = 0; i < usuarios.size(); i++) {
                 for (int j = 0; j < usuarios.get(i).length; j++) {
                     System.out.print(usuarios.get(i)[j] + " | ");
                 }
                 System.out.println("");
-            }            
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Proyecto_Balneario.class.getName()).log(Level.SEVERE, null, ex);
         }

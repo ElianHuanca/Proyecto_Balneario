@@ -11,20 +11,21 @@ import Interpreter.TokenEvent;
  *
  * @author ELIAN
  */
-public interface ITokenEventListener {
-    void user(TokenEvent event);   
-    void client(TokenEvent event);     
-    void dpto(TokenEvent event);            
-    void social(TokenEvent event);      
-    void schedule(TokenEvent event);    
-    void notify(TokenEvent event);
-    void apartment(TokenEvent event); 
-    void visit(TokenEvent event); 
-    void support(TokenEvent event);
-    void reserve(TokenEvent event);
+public interface ITokenEventListener {    
     
     void usuario(TokenEvent event);
     void producto(TokenEvent event);    
     void error(TokenEvent event);
+    
+    void usuarios(TokenEvent event);
+    void tiposMembresias(TokenEvent event);
+    void membresias(TokenEvent event);
+    void ambientes(TokenEvent event);
+    void reservas(TokenEvent event);
+    void detalle_reservas(TokenEvent event);
+    void productos(TokenEvent event);
+    void usos(TokenEvent event);
+    void pago(TokenEvent event);
+    void ingreso(TokenEvent event);
     //agregar mas casos de uso
 }

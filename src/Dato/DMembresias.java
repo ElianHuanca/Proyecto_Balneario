@@ -5,13 +5,13 @@
  */
 package Dato;
 
+import DatabaseConnection.SqlConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import proyecto_balneario.SqlConnection;
 import utils.DateString;
 
 /**

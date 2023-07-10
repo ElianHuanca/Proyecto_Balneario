@@ -16,7 +16,8 @@ import java.util.List;
  */
 
 //NO TOCAR
-public class TokenEvent extends EventObject{
+public class TokenEvent extends EventObject {
+    
     private int action;// accion del caso de uso: add. modify, delete y otros
     private List<String> params; // lista de parametros
     

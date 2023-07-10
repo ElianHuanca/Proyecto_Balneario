@@ -34,6 +34,8 @@ public class Token {
     public static final int APARTMENT = 109;
     public static final int USUARIO = 110;
     public static final int PRODUCTO = 111;
+    public static final int PAGO = 112;
+    public static final int INGRESO = 113;
     
     //ajustar de acuerdo a sus acciones con valores entre 200 a 299
     //Titulos de las acciones generales
@@ -45,6 +47,8 @@ public class Token {
     public static final int CANCEL = 205;
     public static final int REPORT = 206;
     public static final int AGREGAR = 207;
+    public static final int POST = 208;
+    public static final int PUT = 209;    
     
     public static final int ERROR_COMMAND = 300;
     public static final int ERROR_CHARACTER = 301;
@@ -70,6 +74,9 @@ public class Token {
     public static final String LEXEME_APARTMENT = "apartment";
     public static final String LEXEME_USUARIO = "usuario";
     public static final String LEXEME_PRODUCTO = "producto";
+    public static final String LEXEME_RESERVA = "reserva";
+    public static final String LEXEME_PAGO = "pago";
+    public static final String LEXEME_INGRESO = "ingreso";
     
     //ajustar de acuerdo a sus acciones con valores en string
     //Titulos de las acciones generales en string
@@ -81,6 +88,8 @@ public class Token {
     public static final String LEXEME_CANCEL = "cancel";
     public static final String LEXEME_REPORT = "report"; 
     public static final String LEXEME_AGREGAR = "agregar"; 
+    public static final String LEXEME_POST = "post"; 
+    public static final String LEXEME_PUT = "put";  
     
     
     public static final String LEXEME_ERROR_COMMAND = "UNKNOWN COMMAND";
@@ -211,6 +220,10 @@ public class Token {
                 return LEXEME_USUARIO;
             case PRODUCTO:
                 return LEXEME_PRODUCTO;
+            case PAGO:
+                return LEXEME_PAGO;
+            case INGRESO:
+                return LEXEME_INGRESO; 
             
             //ACCION
             case ADD:
@@ -227,7 +240,10 @@ public class Token {
                 return LEXEME_CANCEL;
             case REPORT:
                 return LEXEME_REPORT;
-            
+            case POST:
+                return LEXEME_POST;
+            case PUT:
+                return LEXEME_PUT;
                 
                 
             case ERROR_COMMAND:
@@ -284,7 +300,11 @@ public class Token {
                 return USUARIO;
             case LEXEME_PRODUCTO:
                 return PRODUCTO;
-            
+            case LEXEME_PAGO:
+                return PAGO;
+            case LEXEME_INGRESO:
+                return INGRESO;
+                
             //ACTION    
             case LEXEME_ADD:
                 return ADD;
@@ -302,6 +322,11 @@ public class Token {
                 return REPORT;
             case LEXEME_AGREGAR:
                 return AGREGAR;
+            case LEXEME_POST:
+                return POST;
+            case LEXEME_PUT:
+                return PUT;
+               
                 
             case LEXEME_ERROR_COMMAND:
                 return ERROR_COMMAND;            

@@ -26,13 +26,15 @@ public class DUsos {
         connection = new SqlConnection();
     }
 
-    public void guardar(int idMantenimiento, int idProducto) throws SQLException, ParseException {
-        String query = "INSERT INTO usos(idMantenimiento,idProducto)"
-                + "values(?,?)";
+    public void guardar(String fecha,int cantidad,int idAmbiente, int idProducto) throws SQLException, ParseException {
+        String query = "INSERT INTO usos(fecha,cantidad,idAmbiente,idProducto)"
+                + "values(?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps.setInt(1, idMantenimiento);
-        ps.setInt(2, idProducto);
+        ps.setDate(1, DateString.StringToDateSQL(fecha));
+        ps.setInt(2, cantidad);
+        ps.setInt(3, idAmbiente);
+        ps.setInt(4, idProducto);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class Dusos.java dice: "
@@ -41,14 +43,16 @@ public class DUsos {
         }
     }
 
-    public void modificar(int id, int idMantenimiento, int idProducto) throws SQLException, ParseException {
-        String query = "UPDATE usos SET idMantenimiento=?, idProducto=?"
+    public void modificar(int id, String fecha,int cantidad,int idAmbiente, int idProducto) throws SQLException, ParseException {
+        String query = "UPDATE usos SET fecha=?, cantidad=?, idAmbiente=?, idProducto=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps.setInt(1, idMantenimiento);
-        ps.setInt(2, idProducto);
-        ps.setInt(3, id);
+        ps.setDate(1, DateString.StringToDateSQL(fecha));
+        ps.setInt(2, cantidad);
+        ps.setInt(3, idAmbiente);
+        ps.setInt(4, idProducto);
+        ps.setInt(5, id);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class Dusos.java dice: "
@@ -77,7 +81,9 @@ public class DUsos {
         while (set.next()) {
             usuarios.add(new String[]{
                 String.valueOf(set.getInt("id")),
-                String.valueOf(set.getInt("idMantenimiento")),
+                set.getString("fecha"),
+                String.valueOf(set.getInt("cantidad")),
+                String.valueOf(set.getInt("idAmbiente")),
                 String.valueOf(set.getInt("idProducto")),
             });
         }
@@ -94,7 +100,9 @@ public class DUsos {
         if (set.next()) {
             usuario = new String[]{
                 String.valueOf(set.getInt("id")),
-                String.valueOf(set.getInt("idMantenimiento")),
+                set.getString("fecha"),
+                String.valueOf(set.getInt("cantidad")),
+                String.valueOf(set.getInt("idAmbiente")),
                 String.valueOf(set.getInt("idProducto")),
             };
         }

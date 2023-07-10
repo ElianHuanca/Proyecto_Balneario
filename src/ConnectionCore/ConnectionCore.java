@@ -8,10 +8,12 @@ package ConnectionCore;
 
 
 import Dato.DUsuarios;
+import Interfaces.IEmailEventListener;
 import Interfaces.ITokenEventListener;
 import Interpreter.Interpreter;
 import Interpreter.Token;
 import Interpreter.TokenEvent;
+import Negocio.NUsuarios;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +24,14 @@ import utils.Email;
  */
 public class ConnectionCore {
     public static void main(String[] args) {
-        /*
+        
         MailVerificationThread mail = new MailVerificationThread();
         mail.setEmailEventListener(new IEmailEventListener() {
             @Override
             public void onReceiveEmailEvent(List<Email> emails) {
                 for (Email email : emails) {
-                    //System.out.println(email);
-                    interprete(email);
+                    System.out.println(email);
+                    //interprete(email);
                 }
             }
         });
@@ -37,72 +39,22 @@ public class ConnectionCore {
         Thread thread = new Thread(mail);
         thread.setName("Mail Verification Thread");
         thread.start();
-        */
-        Email emailObject = new Email("ronaldorivero3@gmail.com", Email.SUBJECT,
+        
+        /*Email emailObject = new Email("ronaldorivero3@gmail.com", Email.SUBJECT,
                 "Petición realizada correctamente");
         
         SendEmailThread sendEmail = new SendEmailThread(emailObject);
         Thread thread = new Thread(sendEmail);
         thread.setName("Send email Thread");
-        thread.start();
+        thread.start();*/
     }
     
-    public static void interprete(Email email) {
-        DProductos bProducto = new DProducto();
-        DUsuarios dUsuario = new DUsuarios();
+    /*public static void interprete(Email email) {
+        //DProductos bProducto = new DProducto();
+        NUsuarios dUsuario = new NUsuarios();
         
         Interpreter interpreter = new Interpreter(email.getSubject(), email.getFrom());       
-        interpreter.setListener(new ITokenEventListener() {
-            @Override
-            public void user(TokenEvent event) {
-                System.out.println("CU: USER");
-                System.out.println(event);
-            }
-
-            @Override
-            public void client(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void dpto(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void social(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void schedule(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void notify(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void apartment(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void visit(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void support(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void reserve(TokenEvent event) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+        interpreter.setListener(new ITokenEventListener() {            
 
             @Override
             public void usuario(TokenEvent event) {
@@ -128,7 +80,7 @@ public class ConnectionCore {
                 }
             }
 
-            @Override
+            /*@Override
             public void producto(TokenEvent event) {
                 System.out.println("CU: MASCOTA");
                 System.out.println(event);
@@ -157,11 +109,56 @@ public class ConnectionCore {
                 System.out.println(event);
                 //enviar una notificacion
             }
+
+            @Override
+            public void producto(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void usuarios(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void tiposMembresias(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void membresias(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void ambientes(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void reservas(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void detalle_reservas(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void productos(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void usos(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         });
         
         
         Thread thread = new Thread(interpreter);
         thread.setName("Interpreter Thread");
         thread.start();
-    }
+    }*/
 }

@@ -124,6 +124,24 @@ INSERT INTO usos VALUES(2,'2023-09-07',1,2,5);
 INSERT INTO usos VALUES(3,'2023-09-09',4,3,3);
 INSERT INTO usos VALUES(4,'2023-09-09',1,4,3);
 
+CREATE TABLE ingresos(
+	id int not null,
+	fecha Date,
+	--hora varchar(50),
+	usuario_id int not null,
+	CONSTRAINT PK_INGRESOS PRIMARY KEY (id),
+	CONSTRAINT FK_INGRESOS_USUARIO_ID FOREIGN KEY ( usuario_id)
+	REFERENCES usuarios (id)
+	ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE pagos(
+	id int not null,
+	tipo_pago varchar(50),
+	monto_total int default (0),
+	fecha Date,
+	CONSTRAINT PK_PAGOS PRIMARY KEY (id)
+);
 
 DROP TABLE usos;
 DROP TABLE detalle_reservas;

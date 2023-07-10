@@ -26,15 +26,15 @@ public class DTiposMembresias {
         connection = new SqlConnection();
     }
 
-    public void guardar(String nombre, String descripcion, float precio,String tiempoDuracion ) throws SQLException, ParseException {
-        String query = "INSERT INTO tiposMembresias(nombre,descripcion,precio,tiempoDuracion)"
+    public void guardar(String nombre, String descripcion, float precio,String duracion ) throws SQLException, ParseException {
+        String query = "INSERT INTO tiposMembresias(nombre,descripcion,precio,duracion)"
                 + "values(?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);        
         ps.setString(1, nombre);
         ps.setString(2, descripcion);
         ps.setFloat(3, precio);
-        ps.setString(4, tiempoDuracion);
+        ps.setString(4, duracion);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DTiposMembresias.java dice: "
@@ -43,15 +43,15 @@ public class DTiposMembresias {
         }
     }
 
-    public void modificar(int id,String nombre, String descripcion, float precio,String tiempoDuracion) throws SQLException, ParseException {
-        String query = "UPDATE tiposMembresias SET nombre=?, descripcion=?, precio=?, tiempoDuracion=?"
+    public void modificar(int id,String nombre, String descripcion, float precio,String duracion) throws SQLException, ParseException {
+        String query = "UPDATE tiposMembresias SET nombre=?, descripcion=?, precio=?, duracion=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setString(1, nombre);
         ps.setString(2, descripcion);
         ps.setFloat(3, precio);
-        ps.setString(4, tiempoDuracion);
+        ps.setString(4, duracion);
         ps.setInt(5,id);
 
         if (ps.executeUpdate() == 0) {
@@ -84,7 +84,7 @@ public class DTiposMembresias {
                 set.getString("nombre"),
                 set.getString("descripcion"),
                 String.valueOf(set.getFloat("precio")),
-                set.getString("tiempoDuracion"),                                
+                set.getString("duracion"),                                
             });
         }
         return usuarios;
@@ -103,7 +103,7 @@ public class DTiposMembresias {
                 set.getString("nombre"),
                 set.getString("descripcion"),
                 String.valueOf(set.getFloat("precio")),
-                set.getString("tiempoDuracion"), 
+                set.getString("duracion"), 
             };
         }        
         return usuario;

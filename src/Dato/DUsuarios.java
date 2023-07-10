@@ -31,8 +31,7 @@ public class DUsuarios {
         String query = "INSERT INTO usuarios(ci,nombre,fecha_nacimiento,email,password,rol)"
                 + "values(?,?,?,?,?,?)";
 
-        //PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps = s.pgAdmin.prepareStatement(query);
+        PreparedStatement ps = connection.connect().prepareStatement(query);        
 
         ps.setString(1, ci);
         ps.setString(2, nombre);
@@ -52,7 +51,7 @@ public class DUsuarios {
         String query = "UPDATE usuarios SET ci=?, nombre=?, fecha_nacimiento=?, email=?, password=?, rol=?"
                 + "WHERE id=?";
 
-        ps = connection.connect().prepareStatement(query);
+        PreparedStatement ps = connection.connect().prepareStatement(query);        
 
         ps.setString(1, ci);
         ps.setString(2, nombre);

@@ -58,3 +58,4 @@ public class TokenCommand {
         return params.size();
     }
 }
+
