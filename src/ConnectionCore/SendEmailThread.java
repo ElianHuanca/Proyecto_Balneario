@@ -25,15 +25,7 @@ import utils.Email;
  *
  * @author Elian
  */
-public class SendEmailThread implements Runnable{
-    private final static String PORT_SMTP = "465";
-    private final static String PROTOCOL = "smtp";
-    private final static String HOST = "smtp.googlemail.com";
-    private final static String USER = "ronaldorivero3@gmail.com";
-    private final static String MAIL = "ronaldorivero3@gmail.com";
-    private final static String MAIL_PASSWORD = "***********";
-    
-    /*
+/*
     private final static String PORT_SMTP = "25";
     private final static String PROTOCOL = "smtp";
     private final static String HOST = "mail.tecnoweb.org.bo";
@@ -42,6 +34,16 @@ public class SendEmailThread implements Runnable{
     private final static String MAIL = "grupo13sc@tecnoweb.org.bo";
     private final static String MAIL_PASSWORD = "grup013grup013";
     */
+
+public class SendEmailThread implements Runnable{
+    private final static String PORT_SMTP = "465";
+    private final static String PROTOCOL = "smtp";
+    private final static String HOST = "smtp.googlemail.com";
+    private final static String USER = "huancacori@gmail.com";
+    private final static String MAIL = "huancacori@gmail.com";
+    private final static String MAIL_PASSWORD = "twnygybhbovhvokb";
+    
+    
     private Email email;
     
     public SendEmailThread(Email email) {

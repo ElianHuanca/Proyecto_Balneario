@@ -62,6 +62,7 @@ public class Proyecto_Balneario {
     public static void usuario() {
         NUsuarios nu = new NUsuarios();
         /*List<String> usuario = new ArrayList<String>();
+        usuario.add(4);
         usuario.add("9648312");
         usuario.add("Elian Huanca");
         usuario.add("2000-05-02");

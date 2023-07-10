@@ -22,20 +22,16 @@ public class Token {
     
     // ajustar de acuerdo a sus casos de uso con valores entre 100 a 199
     //Titulos de casos de uso en numero
-    public static final int USER = 100;
-    public static final int CLIENT = 101;
-    public static final int DPTO = 102;
-    public static final int SOCIAL = 103;
-    public static final int SCHEDULE = 104;
-    public static final int NOTIFY = 105;
-    public static final int VISIT = 106;
-    public static final int SUPPORT = 107;
-    public static final int RESERVE = 108;
-    public static final int APARTMENT = 109;
-    public static final int USUARIO = 110;
-    public static final int PRODUCTO = 111;
-    public static final int PAGO = 112;
-    public static final int INGRESO = 113;
+    public static final int USUARIOS = 100;  
+    public static final int TIPOSMEMBRESIAS = 101;
+    public static final int MEMBRESIAS = 102;
+    public static final int AMBIENTES = 103;
+    public static final int RESERVAS = 104;
+    public static final int DETALLERESERVAS = 105;
+    public static final int PRODUCTOS = 106;
+    public static final int USOS = 107;    
+    public static final int INGRESOS = 108;
+    public static final int PAGOS = 109;
     
     //ajustar de acuerdo a sus acciones con valores entre 200 a 299
     //Titulos de las acciones generales
@@ -62,21 +58,17 @@ public class Token {
     
     // ajustar de acuerdo a sus casos de uso con valores en string
     //Titulos de casos de uso con string
-    public static final String LEXEME_USER = "user";
-    public static final String LEXEME_CLIENT = "client";
-    public static final String LEXEME_DPTO = "dpto";
-    public static final String LEXEME_SOCIAL = "social";
-    public static final String LEXEME_SCHEDULE = "schedule";
-    public static final String LEXEME_NOTIFY = "notify";
-    public static final String LEXEME_VISIT = "visit";
-    public static final String LEXEME_SUPPORT = "support";
-    public static final String LEXEME_RESERVE = "reserve";
-    public static final String LEXEME_APARTMENT = "apartment";
-    public static final String LEXEME_USUARIO = "usuario";
-    public static final String LEXEME_PRODUCTO = "producto";
-    public static final String LEXEME_RESERVA = "reserva";
-    public static final String LEXEME_PAGO = "pago";
-    public static final String LEXEME_INGRESO = "ingreso";
+    public static final String LEXEME_USUARIOS = "usuarios";
+    public static final String LEXEME_TIPOSMEMBRESIAS = "tiposmembresias";
+    public static final String LEXEME_MEMBRESIAS = "membresias";
+    public static final String LEXEME_AMBIENTES = "ambientes";
+    public static final String LEXEME_RESERVAS = "reservas";
+    public static final String LEXEME_DETALLERESERVAS = "detallereservas";    
+    public static final String LEXEME_PRODUCTOS = "productos";
+    public static final String LEXEME_USOS = "usos";
+    public static final String LEXEME_INGRESOS = "ingresos";
+    public static final String LEXEME_PAGOS = "pagos";        
+    
     
     //ajustar de acuerdo a sus acciones con valores en string
     //Titulos de las acciones generales en string
@@ -195,36 +187,29 @@ public class Token {
             case ERROR:
                 return LEXEME_ERROR;
                 
-            //CU
-            case USER:
-                return LEXEME_USER;
-            case CLIENT:
-                return LEXEME_CLIENT;
-            case DPTO:
-                return LEXEME_DPTO;
-            case SOCIAL:
-                return LEXEME_SOCIAL;
-            case SCHEDULE:
-                return LEXEME_SCHEDULE;
-            case NOTIFY:
-                return LEXEME_NOTIFY;
-            case VISIT:
-                return LEXEME_VISIT;
-            case SUPPORT:
-                return LEXEME_SUPPORT;
-            case RESERVE:
-                return LEXEME_RESERVE;
-            case APARTMENT:
-                return LEXEME_APARTMENT;
-            case USUARIO:
-                return LEXEME_USUARIO;
-            case PRODUCTO:
-                return LEXEME_PRODUCTO;
-            case PAGO:
-                return LEXEME_PAGO;
-            case INGRESO:
-                return LEXEME_INGRESO; 
-            
+            //CU                     
+            case USUARIOS:
+                return LEXEME_USUARIOS;
+            case TIPOSMEMBRESIAS:
+                return LEXEME_TIPOSMEMBRESIAS;
+            case MEMBRESIAS:
+                return LEXEME_MEMBRESIAS;
+            case AMBIENTES:
+                return LEXEME_AMBIENTES;
+            case RESERVAS:
+                return LEXEME_RESERVAS;
+            case DETALLERESERVAS :
+                return LEXEME_DETALLERESERVAS;
+            case PRODUCTOS :
+                return LEXEME_PRODUCTOS;
+            case USOS :
+                return LEXEME_USOS;
+            case INGRESOS :
+                return LEXEME_INGRESOS;
+            case PAGOS :
+                return LEXEME_PAGOS;
+                
+                
             //ACCION
             case ADD:
                 return LEXEME_ADD;
@@ -275,36 +260,28 @@ public class Token {
             case LEXEME_ERROR:
                 return ERROR;
               
-            //CU 
-            case LEXEME_USER:
-                return USER;
-            case LEXEME_CLIENT:
-                return CLIENT;
-            case LEXEME_DPTO:
-                return DPTO;
-            case LEXEME_SOCIAL:
-                return SOCIAL;
-            case LEXEME_SCHEDULE:
-                return SCHEDULE;
-            case LEXEME_NOTIFY:
-                return NOTIFY;
-            case LEXEME_VISIT:
-                return VISIT;
-            case LEXEME_SUPPORT:
-                return SUPPORT;
-            case LEXEME_RESERVE:
-                return RESERVE;
-            case LEXEME_APARTMENT:
-                return APARTMENT;
-            case LEXEME_USUARIO:
-                return USUARIO;
-            case LEXEME_PRODUCTO:
-                return PRODUCTO;
-            case LEXEME_PAGO:
-                return PAGO;
-            case LEXEME_INGRESO:
-                return INGRESO;
-                
+            //CU                         
+            case LEXEME_USUARIOS:
+                return USUARIOS;
+            case LEXEME_TIPOSMEMBRESIAS:
+                return TIPOSMEMBRESIAS;
+            case LEXEME_MEMBRESIAS:
+                return MEMBRESIAS;
+            case LEXEME_AMBIENTES:
+                return AMBIENTES;
+            case LEXEME_RESERVAS:
+                return RESERVAS;
+            case LEXEME_DETALLERESERVAS:
+                return DETALLERESERVAS;
+            case LEXEME_PRODUCTOS:
+                return PRODUCTOS;
+            case LEXEME_USOS:
+                return USOS;
+            case LEXEME_INGRESOS:
+                return INGRESOS;
+            case LEXEME_PAGOS:
+                return PAGOS;
+            
             //ACTION    
             case LEXEME_ADD:
                 return ADD;

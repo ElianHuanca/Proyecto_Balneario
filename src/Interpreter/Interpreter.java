@@ -60,20 +60,37 @@ public class Interpreter implements Runnable{
         }
         
         //ajustar de acuerdo a su casos de uso
-        switch(token_command.getName()){                          
-            case Token.USUARIO:
-                listener.usuario(token_event);
+        switch(token_command.getName()){                                         
+            case Token.USUARIOS:
+                listener.usuarios(token_event);
                 break;
-            case Token.PRODUCTO:
-                listener.producto(token_event);
+            case Token.TIPOSMEMBRESIAS:
+                listener.tiposMembresias(token_event);
                 break;
-            case Token.PAGO:
-                listener.pago(token_event);
+            case Token.MEMBRESIAS:
+                listener.membresias(token_event);
                 break;
-            case Token.INGRESO:
-                listener.ingreso(token_event);
-                break;   
-            
+            case Token.AMBIENTES:
+                listener.ambientes(token_event);
+                break;
+            case Token.RESERVAS:
+                listener.reservas(token_event);
+                break;
+            case Token.DETALLERESERVAS:
+                listener.detalle_reservas(token_event);
+                break;
+            case Token.PRODUCTOS:
+                listener.productos(token_event);
+                break;
+            case Token.USOS:
+                listener.usos(token_event);
+                break;
+            case Token.INGRESOS:
+                listener.ingresos(token_event);
+                break;
+            case Token.PAGOS:
+                listener.pagos(token_event);
+                break;
         }
         
     }

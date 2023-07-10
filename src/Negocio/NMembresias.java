@@ -34,7 +34,7 @@ public class NMembresias {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dMembresias.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Integer.parseInt(parametros.get(2)), Integer.parseInt(parametros.get(3)));
+        dMembresias.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Integer.parseInt(parametros.get(3)), Integer.parseInt(parametros.get(4)));
         dMembresias.desconectar();
     }
     

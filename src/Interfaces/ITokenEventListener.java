@@ -25,7 +25,7 @@ public interface ITokenEventListener {
     void detalle_reservas(TokenEvent event);
     void productos(TokenEvent event);
     void usos(TokenEvent event);
-    void pago(TokenEvent event);
-    void ingreso(TokenEvent event);
+    void ingresos(TokenEvent event);
+    void pagos(TokenEvent event);    
     //agregar mas casos de uso
 }

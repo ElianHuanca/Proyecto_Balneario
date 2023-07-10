@@ -34,7 +34,7 @@ public class NAmbientes {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dAmbientes.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), Float.parseFloat(parametros.get(1)), Integer.parseInt(parametros.get(2)));
+        dAmbientes.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), Float.parseFloat(parametros.get(2)), Integer.parseInt(parametros.get(3)));
         dAmbientes.desconectar();
     }
     

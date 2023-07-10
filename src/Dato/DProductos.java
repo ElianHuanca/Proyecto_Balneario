@@ -24,14 +24,14 @@ public class DProductos {
         connection = new SqlConnection();
     }
 
-    public void guardar(String nombre, String descripcion, float precio ) throws SQLException, ParseException {
-        String query = "INSERT INTO productos(nombre,descripcion,precio)"
-                + "values(?,?,?)";
+    public void guardar(String nombre, float precio ) throws SQLException, ParseException {
+        String query = "INSERT INTO productos(nombre,precio)"
+                + "values(?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);        
         ps.setString(1, nombre);
-        ps.setString(2, descripcion);
-        ps.setFloat(3, precio);
+        //ps.setString(2, descripcion);
+        ps.setFloat(2, precio);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DProductos.java dice: "
@@ -40,15 +40,14 @@ public class DProductos {
         }
     }
 
-    public void modificar(int id,String nombre, String descripcion, float precio) throws SQLException, ParseException {
-        String query = "UPDATE productos SET nombre=?, descripcion=?, precio=?"
+    public void modificar(int id,String nombre, float precio) throws SQLException, ParseException {
+        String query = "UPDATE productos SET nombre=?, precio=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps.setString(1, nombre);
-        ps.setString(2, descripcion);
-        ps.setFloat(3, precio);        
-        ps.setInt(4,id);
+        ps.setString(1, nombre);        
+        ps.setFloat(2, precio);        
+        ps.setInt(3,id);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DProductos.java dice: "
@@ -78,7 +77,7 @@ public class DProductos {
             usuarios.add(new String[] {
                 String.valueOf(set.getInt("id")),                
                 set.getString("nombre"),
-                set.getString("descripcion"),
+                //set.getString("descripcion"),
                 String.valueOf(set.getFloat("precio")),                                                
             });
         }
@@ -96,7 +95,7 @@ public class DProductos {
             usuario = new String[] {
                 String.valueOf(set.getInt("id")),                
                 set.getString("nombre"),
-                set.getString("descripcion"),
+                //set.getString("descripcion"),
                 String.valueOf(set.getFloat("precio")),                
             };
         }        

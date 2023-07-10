@@ -27,7 +27,7 @@ public class NProductos {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dProductos.guardar(parametros.get(0), parametros.get(1), Float.parseFloat(parametros.get(2)));
+        dProductos.guardar(parametros.get(0), Float.parseFloat(parametros.get(1)));
         dProductos.desconectar();
     }
 
@@ -35,7 +35,7 @@ public class NProductos {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dProductos.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Float.parseFloat(parametros.get(3)));
+        dProductos.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), Float.parseFloat(parametros.get(2)));
         dProductos.desconectar();
     }
 

@@ -143,6 +143,17 @@ CREATE TABLE pagos(
 	CONSTRAINT PK_PAGOS PRIMARY KEY (id)
 );
 
+SELECT * FROM usuarios;
+SELECT * FROM tiposMembresias;
+SELECT * FROM membresias;
+SELECT * FROM ambientes;
+SELECT * FROM reservas;
+SELECT * FROM detalle_reservas;
+SELECT * FROM productos;
+SELECT * FROM usos;
+SELECT * FROM ingresos;
+SELECT * FROM pagos;
+
 DROP TABLE usos;
 DROP TABLE detalle_reservas;
 DROP TABLE reservas;
