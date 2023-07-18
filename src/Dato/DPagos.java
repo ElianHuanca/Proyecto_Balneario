@@ -20,7 +20,7 @@ import utils.DateString;
  */
 public class DPagos {
     public static final String[] HEADERS =
-    {"ID","TIPO_PAGO","MONTO_TOTAL","EMAIL","FECHA"};
+    {"ID","TIPO_PAGO","MONTO_TOTAL","FECHA"};
 
     private SqlConnection connection;
 
@@ -99,7 +99,7 @@ public class DPagos {
         if(set.next()) {
             pago = new String[] {
                 String.valueOf(set.getInt("id")),
-                String.valueOf(set.getString("tipo_pago")),
+                String.valueOf("tipo_pago"),
                 String.valueOf(set.getFloat("monto_total")),
                 set.getString("fecha")
             };

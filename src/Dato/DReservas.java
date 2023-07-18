@@ -20,20 +20,24 @@ import utils.DateString;
  */
 public class DReservas {
 
+    public static final String[] HEADERS
+            = {"ID", "FECHA", "TURNO", "IDUSUARIO","IDPAGO"};
+    
     private final SqlConnection connection;
 
     public DReservas() {
         connection = new SqlConnection();
     }
 
-    public void guardar(String fecha, String turno, int idUsuario) throws SQLException, ParseException {
-                String query = "INSERT INTO reservas(fecha,turno,idUsuario)"
-                + "values(?,?,?)";
+    public void guardar(String fecha, String turno, int idUsuario,int idPago) throws SQLException, ParseException {
+        String query = "INSERT INTO reservas(fecha,turno,idUsuario,idPago)"
+                + "values(?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setDate(1, DateString.StringToDateSQL(fecha));
         ps.setString(2, turno);
         ps.setInt(3, idUsuario);
+        ps.setInt(4, idPago);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DReservas.java dice: "
@@ -42,15 +46,16 @@ public class DReservas {
         }
     }
 
-    public void modificar(int id, String fecha, String turno, int idUsuario) throws SQLException, ParseException {
-        String query = "UPDATE reservas SET fecha=?, turno=?, idUsuario=?"
+    public void modificar(int id, String fecha, String turno, int idUsuario,int idPago) throws SQLException, ParseException {
+        String query = "UPDATE reservas SET fecha=?, turno=?, idUsuario=? , idPago=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setDate(1, DateString.StringToDateSQL(fecha));
         ps.setString(2, turno);
         ps.setInt(3, idUsuario);
-        ps.setInt(4, id);
+        ps.setInt(4, idPago);
+        ps.setInt(5, id);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DReservas.java dice: "
@@ -80,8 +85,9 @@ public class DReservas {
             usuarios.add(new String[]{
                 String.valueOf(set.getInt("id")),
                 set.getString("fecha"),
-                set.getString("turno"),                
+                set.getString("turno"),
                 String.valueOf(set.getInt("idUsuario")),
+                String.valueOf(set.getInt("idPago")),
             });
         }
         return usuarios;
@@ -98,8 +104,9 @@ public class DReservas {
             usuario = new String[]{
                 String.valueOf(set.getInt("id")),
                 set.getString("fecha"),
-                set.getString("turno"),                
+                set.getString("turno"),
                 String.valueOf(set.getInt("idUsuario")),
+                String.valueOf(set.getInt("idPago")),
             };
         }
         return usuario;

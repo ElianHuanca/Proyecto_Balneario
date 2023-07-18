@@ -20,21 +20,25 @@ import utils.DateString;
  */
 public class DMembresias {
     
+    public static final String[] HEADERS =
+    {"ID","FECHA_INI","FECHA_FIN","IDUSUARIO","IDTIPOMEMBRESIA","IDPAGO"};
+    
     private final SqlConnection connection;
 
     public DMembresias() {
         connection = new SqlConnection();
     }
 
-    public void guardar(String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia ) throws SQLException, ParseException {
-        String query = "INSERT INTO membresias(fecha_ini,fecha_fin,idUsuario,idTipoMembresia)"
-                + "values(?,?,?,?)";
+    public void guardar(String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia,int idPago ) throws SQLException, ParseException {
+        String query = "INSERT INTO membresias(fecha_ini,fecha_fin,idUsuario,idTipoMembresia,idPago)"
+                + "values(?,?,?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);        
         ps.setDate(1, DateString.StringToDateSQL(fecha_ini));
         ps.setDate(2, DateString.StringToDateSQL(fecha_fin));
-        ps.setInt(3, idUsuario);
+        ps.setInt(3, idUsuario);        
         ps.setInt(4, idTipoMembresia);
+        ps.setInt(5, idPago);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DMembresias.java dice: "
@@ -43,8 +47,8 @@ public class DMembresias {
         }
     }
 
-    public void modificar(int id,String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia) throws SQLException, ParseException {
-        String query = "UPDATE membresias SET fecha_ini=?, fecha_fin=?, idUsuario=?, idTipoMembresia=?"
+    public void modificar(int id,String fecha_ini, String fecha_fin, int idUsuario,int idTipoMembresia,int idPago) throws SQLException, ParseException {
+        String query = "UPDATE membresias SET fecha_ini=?, fecha_fin=?, idUsuario=?, idTipoMembresia=?, idPago=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
@@ -52,7 +56,8 @@ public class DMembresias {
         ps.setDate(2, DateString.StringToDateSQL(fecha_fin));
         ps.setInt(3, idUsuario);
         ps.setInt(4, idTipoMembresia);
-        ps.setInt(5,id);
+        ps.setInt(5, idPago);
+        ps.setInt(6,id);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DMembresias.java dice: "
@@ -83,8 +88,9 @@ public class DMembresias {
                 String.valueOf(set.getInt("id")),
                 set.getString("fecha_ini"),
                 set.getString("fecha_fin"),
-                set.getString("idUsuario"),                
-                set.getString("idTipoMembresia")
+                String.valueOf(set.getInt("idUsuario")),                    
+                String.valueOf(set.getInt("idTipoMembresia")),
+                String.valueOf(set.getInt("idPago")), 
             });
         }
         return usuarios;
@@ -102,8 +108,9 @@ public class DMembresias {
                 String.valueOf(set.getInt("id")),
                 set.getString("fecha_ini"),
                 set.getString("fecha_fin"),
-                set.getString("idUsuario"),                
-                set.getString("idTipoMembresia")
+                String.valueOf(set.getInt("idUsuario")),                    
+                String.valueOf(set.getInt("idTipoMembresia")),
+                String.valueOf(set.getInt("idPago")), 
             };
         }        
         return usuario;

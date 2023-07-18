@@ -26,7 +26,7 @@ public class NReservas {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dReservas.guardar(parametros.get(0),parametros.get(1), Integer.parseInt(parametros.get(2)));
+        dReservas.guardar(parametros.get(0),parametros.get(1), Integer.parseInt(parametros.get(2)),Integer.parseInt(parametros.get(3)));
         dReservas.desconectar();
     }
     
@@ -34,7 +34,7 @@ public class NReservas {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dReservas.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Integer.parseInt(parametros.get(3)));
+        dReservas.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), Integer.parseInt(parametros.get(3)) ,Integer.parseInt(parametros.get(4)));
         dReservas.desconectar();
     }
     

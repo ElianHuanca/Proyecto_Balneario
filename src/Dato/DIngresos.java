@@ -20,7 +20,7 @@ import utils.DateString;
  */
 public class DIngresos {
     public static final String[] HEADERS =
-    {"ID","FECHA","USUARIO_ID"};
+    {"ID","FECHA","IDUSUARIO"};
     
     private SqlConnection connection;
 
@@ -28,13 +28,13 @@ public class DIngresos {
         connection = new SqlConnection();
     }
 
-    public void guardar(String fecha, int usuarioId) throws SQLException, ParseException {
-        String query = "INSERT INTO ingresos(fecha,usuario_id)"
+    public void guardar(String fecha, int idUsuario) throws SQLException, ParseException {
+        String query = "INSERT INTO ingresos(fecha,idUsuario)"
                 + "values(?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setDate(1, DateString.StringToDateSQL(fecha));
-        ps.setInt(2, usuarioId);
+        ps.setInt(2, idUsuario);
 
         if (ps.executeUpdate() == 0) {
             System.err.println("Class DIngreso.java dice: "
@@ -43,13 +43,13 @@ public class DIngresos {
         }
     }
 
-    public void modificar(int id, String fecha, int usuarioId) throws SQLException, ParseException {
-        String query = "UPDATE ingresos SET fecha=?, hora=?, usuarioId=?"
+    public void modificar(int id, String fecha, int idUsuario) throws SQLException, ParseException {
+        String query = "UPDATE ingresos SET fecha=?, idUsuario=?"
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
         ps.setDate(1, DateString.StringToDateSQL(fecha));
-        ps.setFloat(2,usuarioId);
+        ps.setFloat(2,idUsuario);
         ps.setInt(3,id);
 
         if (ps.executeUpdate() == 0) {
@@ -79,9 +79,8 @@ public class DIngresos {
         while(set.next()) {
             productos.add(new String[] {
                 String.valueOf(set.getInt("id")),
-                set.getString("nombre"),
-                set.getString("descripcion"),               
-                String.valueOf(set.getFloat("precio"))
+                set.getString("fecha"),                              
+                String.valueOf(set.getInt("idUsuario")),
             });
         }
         return productos;
@@ -97,9 +96,8 @@ public class DIngresos {
         if(set.next()) {
             producto = new String[] {
                 String.valueOf(set.getInt("id")),
-                set.getString("nombre"),
-                set.getString("descripcion"),                
-                String.valueOf(set.getFloat("precio"))
+                set.getString("fecha"),                              
+                String.valueOf(set.getInt("idUsuario")),
             };
         }        
         return producto;

@@ -40,19 +40,30 @@ INSERT INTO tiposMembresias VALUES(1,'BRONCE','10 Entradas',150,'3 Meses');
 INSERT INTO tiposMembresias VALUES(2,'PLATA','15 Entradas, Descuento 30% De Alquier de ambiente',400,'6 Meses');
 INSERT INTO tiposMembresias VALUES(3,'ORO','20 Entradas, Descuento 30% De Alquier de ambiente, Descuento 40% De Consumi de Comida y Bebidas',800,'9 Meses');
 
+CREATE TABLE pagos(
+	id int not null,
+	tipo_pago varchar(50),
+	monto_total int default (0),
+	fecha Date,
+	CONSTRAINT PK_PAGOS PRIMARY KEY (id)
+);
+
 CREATE TABLE membresias(
   id serial not null,
   fecha_ini DATE,
   fecha_fin DATE,
   idUsuario int,
   idTipoMembresia int,
+	idPago int,
   CONSTRAINT PK_MEMBRESIAS PRIMARY KEY(id),
   CONSTRAINT FK_USUARIOS FOREIGN KEY(idUsuario) REFERENCES usuarios(id),
+  CONSTRAINT FK_PAGOS FOREIGN KEY(idPago) REFERENCES pagos(id),
   CONSTRAINT FK_TIPOSMEMBRESIAS FOREIGN KEY(idTipoMembresia) REFERENCES tiposMembresias(id)
 );
-
-INSERT INTO membresias VALUES(1,'2023-06-30','2023-09-30',3,1);
-INSERT INTO membresias VALUES(2,'2024-09-30','2023-03-30',3,2);
+INSERT INTO pagos VALUES(1,'QR',150,'2023-06-30');
+INSERT INTO pagos VALUES(2,'Tarjeta Debito',400,'2023-09-30');
+INSERT INTO membresias VALUES(1,'2023-06-30','2023-09-30',3,1,1);
+INSERT INTO membresias VALUES(2,'2023-09-30','2024-03-30',3,2,2);
 
 CREATE TABLE ambientes(
   id serial not null,
@@ -74,12 +85,16 @@ CREATE TABLE reservas(
   fecha DATE,
   turno varchar(50),
   idUsuario int,
+	idPago int,
   CONSTRAINT PK_RESERVAS PRIMARY KEY(id),
-  CONSTRAINT FK_USUARIOS FOREIGN KEY(idUsuario) REFERENCES usuarios(id)
+  CONSTRAINT FK_USUARIOS FOREIGN KEY(idUsuario) REFERENCES usuarios(id),
+	CONSTRAINT FK_PAGOS FOREIGN KEY(idPago) REFERENCES pagos(id)
 );
 
-INSERT INTO reservas VALUES(1,'2023-06-30','Mañana',3);
-INSERT INTO reservas VALUES(2,'2023-07-05','Noche',3);
+INSERT INTO pagos VALUES(3,'QR',650,'2023-06-30');
+INSERT INTO pagos VALUES(4,'Tarjeta Credito',365,'2023-07-05');
+INSERT INTO reservas VALUES(1,'2023-06-30','Mañana',3,3);
+INSERT INTO reservas VALUES(2,'2023-07-05','Noche',3,4);
 
 CREATE TABLE detalle_reservas(
 	id serial not null,
@@ -128,20 +143,16 @@ CREATE TABLE ingresos(
 	id int not null,
 	fecha Date,
 	--hora varchar(50),
-	usuario_id int not null,
+	idUsuario int not null,
 	CONSTRAINT PK_INGRESOS PRIMARY KEY (id),
-	CONSTRAINT FK_INGRESOS_USUARIO_ID FOREIGN KEY ( usuario_id)
+	CONSTRAINT FK_INGRESOS_USUARIO_ID FOREIGN KEY ( idUsuario)
 	REFERENCES usuarios (id)
 	ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-CREATE TABLE pagos(
-	id int not null,
-	tipo_pago varchar(50),
-	monto_total int default (0),
-	fecha Date,
-	CONSTRAINT PK_PAGOS PRIMARY KEY (id)
-);
+INSERT INTO ingresos VALUES(1,'2023-07-17',3);
+INSERT INTO ingresos VALUES(2,'2023-07-18',3);
+INSERT INTO ingresos VALUES(3,'2023-07-19',3);
 
 SELECT * FROM usuarios;
 SELECT * FROM tiposMembresias;
@@ -151,14 +162,18 @@ SELECT * FROM reservas;
 SELECT * FROM detalle_reservas;
 SELECT * FROM productos;
 SELECT * FROM usos;
-SELECT * FROM ingresos;
+SELECT * FROM ingresos; 
 SELECT * FROM pagos;
 
+
+DROP TABLE ingresos;
 DROP TABLE usos;
+DROP TABLE productos;
 DROP TABLE detalle_reservas;
 DROP TABLE reservas;
 DROP TABLE ambientes;
 DROP TABLE membresias;
+DROP TABLE pagos;
 DROP TABLE tiposMembresias;
 DROP TABLE usuarios;
 

@@ -19,6 +19,10 @@ import utils.DateString;
  * @author Elian
  */
 public class DDetalleReservas {
+
+    public static final String[] HEADERS
+            = {"ID", "IDRESERVA", "IDAMBIENTE"};
+
     private final SqlConnection connection;
 
     public DDetalleReservas() {
@@ -30,7 +34,7 @@ public class DDetalleReservas {
                 + "values(?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps.setInt(1, idReserva);       
+        ps.setInt(1, idReserva);
         ps.setInt(2, idAmbiente);
 
         if (ps.executeUpdate() == 0) {
@@ -45,7 +49,7 @@ public class DDetalleReservas {
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);
-        ps.setInt(1, idReserva);       
+        ps.setInt(1, idReserva);
         ps.setInt(2, idAmbiente);
         ps.setInt(3, id);
 
@@ -76,9 +80,8 @@ public class DDetalleReservas {
         while (set.next()) {
             usuarios.add(new String[]{
                 String.valueOf(set.getInt("id")),
-                String.valueOf(set.getInt("idReserva")),                
-                String.valueOf(set.getInt("idAmbiente")),
-            });
+                String.valueOf(set.getInt("idReserva")),
+                String.valueOf(set.getInt("idAmbiente")),});
         }
         return usuarios;
     }
@@ -93,9 +96,8 @@ public class DDetalleReservas {
         if (set.next()) {
             usuario = new String[]{
                 String.valueOf(set.getInt("id")),
-                String.valueOf(set.getInt("idReserva")),                
-                String.valueOf(set.getInt("idAmbiente")),
-            };
+                String.valueOf(set.getInt("idReserva")),
+                String.valueOf(set.getInt("idAmbiente")),};
         }
         return usuario;
     }

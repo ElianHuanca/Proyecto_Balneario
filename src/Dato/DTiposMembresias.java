@@ -20,6 +20,10 @@ import java.util.List;
  */
 public class DTiposMembresias {
     
+    public static final String[] HEADERS = 
+        {"ID","NOMBRE", "DESCRIPCION", "PRECIO", "DURACION"};
+    
+    
     private final SqlConnection connection;
 
     public DTiposMembresias() {

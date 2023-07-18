@@ -21,6 +21,9 @@ import utils.DateString;
  */
 public class DUsuarios {
 
+    public static final String[] HEADERS = 
+        {"ID","CI","NOMBRE","FECHA NACIMIENTO", "EMAIL", "PASSWORD", "ROL"};
+    
     private final SqlConnection connection;
 
     public DUsuarios() {

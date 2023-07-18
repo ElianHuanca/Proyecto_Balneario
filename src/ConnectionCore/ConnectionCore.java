@@ -79,15 +79,7 @@ public class ConnectionCore {
         Interpreter interpreter = new Interpreter(email.getSubject(), email.getFrom());
         interpreter.setListener(new ITokenEventListener() {
 
-            @Override
-            public void usuario(TokenEvent event) {
-
-            }
-
-            @Override
-            public void producto(TokenEvent event) {
-                
-            }
+            
 
             @Override
             public void usuarios(TokenEvent event) {

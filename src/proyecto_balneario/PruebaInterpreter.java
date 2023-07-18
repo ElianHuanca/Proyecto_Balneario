@@ -107,17 +107,7 @@ public class PruebaInterpreter {
         NIngresos nIngresos = new NIngresos();
 
         Interpreter interpreter = new Interpreter(delete, correo);
-        interpreter.setListener(new ITokenEventListener() {
-
-            @Override
-            public void usuario(TokenEvent event) {
-
-            }
-
-            @Override
-            public void producto(TokenEvent event) {
-                
-            }
+        interpreter.setListener(new ITokenEventListener() {    
 
             @Override
             public void usuarios(TokenEvent event) {

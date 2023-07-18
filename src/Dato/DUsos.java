@@ -20,6 +20,8 @@ import utils.DateString;
  */
 public class DUsos {
 
+    public static final String[] HEADERS = 
+        {"ID","FECHA", "CANTIDAD", "IDAMBIENTE", "IDPRODUCTO"};
     private final SqlConnection connection;
 
     public DUsos() {

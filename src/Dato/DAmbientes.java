@@ -19,6 +19,10 @@ import java.util.List;
  * @author Elian
  */
 public class DAmbientes {
+    
+    public static final String[] HEADERS
+            = {"ID", "NOMBRE", "PRECIO","CAPACIDAD"};
+    
     private final SqlConnection connection;
 
     public DAmbientes() {

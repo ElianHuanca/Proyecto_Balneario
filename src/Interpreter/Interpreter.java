@@ -67,6 +67,9 @@ public class Interpreter implements Runnable{
             case Token.TIPOSMEMBRESIAS:
                 listener.tiposMembresias(token_event);
                 break;
+            case Token.PAGOS:
+                listener.pagos(token_event);
+                break;
             case Token.MEMBRESIAS:
                 listener.membresias(token_event);
                 break;
@@ -87,9 +90,6 @@ public class Interpreter implements Runnable{
                 break;
             case Token.INGRESOS:
                 listener.ingresos(token_event);
-                break;
-            case Token.PAGOS:
-                listener.pagos(token_event);
                 break;
         }
         

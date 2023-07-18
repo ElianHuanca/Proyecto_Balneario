@@ -18,6 +18,10 @@ import java.util.List;
  * @author Elian
  */
 public class DProductos {
+    
+    public static final String[] HEADERS
+            = {"ID", "NOMBRE", "PRECIO"};
+    
     private final SqlConnection connection;
 
     public DProductos() {

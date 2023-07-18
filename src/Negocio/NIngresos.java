@@ -9,6 +9,7 @@ import Dato.DIngresos;
 import Dato.DUsuarios;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,33 +32,27 @@ public class NIngresos {
             dIngreso.desconectar();
         }
         dUsuario.desconectar();
-    }
+    }  
 
-    //si incluimos id 
-    /*public void modificar(List<String> parametros) throws SQLException, ParseException{
-        dIngreso.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), parametros.get(2), (int) Float.parseFloat(parametros.get(3)));
+    public void modificar(List<String> parametros) throws SQLException, ParseException{
+        if (parametros.isEmpty()) {
+            throw new SQLException("Parametros vacios!");
+        }
+        dIngreso.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1),Integer.parseInt(parametros.get(2)));
         dIngreso.desconectar();
     }
-    //Integer.parseInt(parametros.get(0))
-    //Float.parseFloat(parametros.get(2)));
     
-    //solo incluimos el id 
     public void eliminar(List<String> parametros) throws SQLException{
+        if (parametros.isEmpty()) {
+            throw new SQLException("Parametros vacios!");
+        }
         dIngreso.eliminar(Integer.parseInt(parametros.get(0)));
         dIngreso.desconectar();
     }
     
     public ArrayList<String[]> listar() throws SQLException{
-        ArrayList<String[]> productos =  (ArrayList<String[]>) dIngreso.listar();
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dIngreso.listar();
         dIngreso.desconectar();
-        return productos;
-    }
-
-    public void guardar(List<String> ingreso) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
-
-    public void guardar(List<String> pago) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return usuarios;
     }
 }
