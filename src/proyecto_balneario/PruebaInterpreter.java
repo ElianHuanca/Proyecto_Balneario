@@ -467,6 +467,11 @@ public class PruebaInterpreter {
                 System.out.println(event);
                 //enviar una notificacion
             }
+
+            @Override
+            public void comandos(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         });
 
         Thread thread = new Thread(interpreter);

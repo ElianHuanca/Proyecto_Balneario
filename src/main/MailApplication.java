@@ -8,6 +8,7 @@ package main;
 import ConnectionCore.MailVerificationThread;
 import ConnectionCore.SendEmailThread;
 import Dato.DAmbientes;
+import Dato.DComandos;
 import Dato.DDetalleReservas;
 import Dato.DIngresos;
 import Dato.DMembresias;
@@ -23,6 +24,7 @@ import Interpreter.Interpreter;
 import Interpreter.Token;
 import Interpreter.TokenEvent;
 import Negocio.NAmbientes;
+import Negocio.NComandos;
 import Negocio.NDetalleReservas;
 import Negocio.NIngresos;
 import Negocio.NMembresias;
@@ -54,7 +56,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
     private static final int AUTHORIZATION_ERROR = -6;
 
     private MailVerificationThread mailVerificationThread;
-    
+
     private NUsuarios nUsuarios;
     private NTiposMembresias nTiposMembresias;
     private NMembresias nMembresias;
@@ -65,11 +67,12 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
     private NUsos nUsos;
     private NPagos nPagos;
     private NIngresos nIngresos;
+    private NComandos nComandos;
 
     public MailApplication() {
         mailVerificationThread = new MailVerificationThread();
         mailVerificationThread.setEmailEventListener(MailApplication.this);
-        nUsuarios  = new NUsuarios();
+        nUsuarios = new NUsuarios();
         nTiposMembresias = new NTiposMembresias();
         nMembresias = new NMembresias();
         nAmbientes = new NAmbientes();
@@ -79,6 +82,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
         nUsos = new NUsos();
         nPagos = new NPagos();
         nIngresos = new NIngresos();
+        nComandos = new NComandos();
     }
 
     public void start() {
@@ -181,7 +185,13 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     private void tableNotifySuccess(String email, String title, String[] headers, ArrayList<String[]> data) {
         Email emailObject = new Email(email, Email.SUBJECT,
-                HtmlBuilder.generateTableBootstrap(title, headers, data));
+                HtmlBuilder.generateTable(title, headers, data));
+        sendEmail(emailObject);
+    }
+
+    private void tableGraficaSuccess(String email, String title, ArrayList<String[]> data) {
+        Email emailObject = new Email(email, Email.SUBJECT,
+                HtmlBuilder.generateGrafica(title, data));
         sendEmail(emailObject);
     }
 
@@ -200,7 +210,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void usuarios(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Usuarios", DUsuarios.HEADERS, nUsuarios.listar());
@@ -209,7 +219,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nUsuarios.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Usuario Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nUsuarios.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -221,7 +231,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Usuario Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -234,7 +244,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void tiposMembresias(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de TiposMembresias", DTiposMembresias.HEADERS, nTiposMembresias.listar());
@@ -243,7 +253,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nTiposMembresias.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "TiposMembresia Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nTiposMembresias.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -255,7 +265,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "TiposMembresia Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -268,16 +278,16 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void membresias(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
-                    tableNotifySuccess(event.getSender(), "Lista de Membresias", DMembresias.HEADERS, nMembresias.listar());
+                    tableNotifySuccess(event.getSender(), "Lista de Membresias", DMembresias.HEADERS, nMembresias.listar());                   
                     break;
                 case Token.POST:
                     nMembresias.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Membresia Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nMembresias.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -288,8 +298,11 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     System.out.println("Eliminado con exito");
                     simpleNotifySuccess(event.getSender(), "Membresia Eliminado Correctamente");
                     break;
+                case Token.GRAFICA:
+                    tableGraficaSuccess(event.getSender(), "Grafica De Consumo De Membresias", nMembresias.listarGrafica());
+                    break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -302,7 +315,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void ambientes(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Ambientes", DAmbientes.HEADERS, nAmbientes.listar());
@@ -311,7 +324,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nAmbientes.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Ambiente Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nAmbientes.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -322,8 +335,11 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     System.out.println("Eliminado con exito");
                     simpleNotifySuccess(event.getSender(), "Ambiente Eliminado Correctamente");
                     break;
+                case Token.GRAFICA:
+                    tableGraficaSuccess(event.getSender(), "Grafica De Reservas De Ambientes", nMembresias.listarGrafica());
+                    break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -336,7 +352,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void reservas(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Reservas", DReservas.HEADERS, nReservas.listar());
@@ -345,7 +361,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nReservas.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Reserva Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nReservas.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -357,7 +373,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Reserva Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -370,7 +386,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void detalle_reservas(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de DetalleReservas", DDetalleReservas.HEADERS, nDetalleReservas.listar());
@@ -379,7 +395,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nDetalleReservas.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "DetalleReserva Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nDetalleReservas.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -391,7 +407,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "DetalleReserva Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -413,7 +429,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nProductos.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Producto Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nProductos.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -438,7 +454,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void usos(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Usos", DUsos.HEADERS, nUsos.listar());
@@ -447,7 +463,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nUsos.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Uso Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nUsos.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -459,7 +475,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Uso Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -472,16 +488,16 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void ingresos(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Ingresos", DIngresos.HEADERS, nIngresos.listar());
                     break;
                 case Token.POST:
-                    nIngresos.guardar(event.getParams(),event.getSender());
+                    nIngresos.guardar(event.getParams(), event.getSender());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Ingreso Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nIngresos.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -493,7 +509,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Ingreso Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
@@ -506,7 +522,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
 
     @Override
     public void pagos(TokenEvent event) {
-        try{
+        try {
             switch (event.getAction()) {
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Pagos", DPagos.HEADERS, nPagos.listar());
@@ -515,7 +531,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     nPagos.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Pago Guardado Correctamente");
-                    break;                
+                    break;
                 case Token.PUT:
                     nPagos.modificar(event.getParams());
                     System.out.println("Modificado con exito");
@@ -527,13 +543,29 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Pago Eliminado Correctamente");
                     break;
             }
-        }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             handleError(NUMBER_FORMAT_ERROR, event.getSender(), null);
         } catch (SQLException exes) {
             handleError(CONSTRAINTS_ERROR, event.getSender(), null);
         } catch (IndexOutOfBoundsException ex) {
             handleError(INDEX_OUT_OF_BOUND_ERROR, event.getSender(), null);
         } catch (ParseException ex) {
+            Logger.getLogger(MailApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void comandos(TokenEvent event) {
+        try {
+            switch (event.getAction()) {
+                case Token.GET:
+                    tableNotifySuccess(event.getSender(), "Lista De Comandos", DComandos.HEADERS, nComandos.listar());
+                    break;
+//                case Token.GET:
+//                    tableNotifySuccess(event.getSender(), "Lista de Pagos", DPagos.HEADERS, nPagos.listar());
+//                    break;
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(MailApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

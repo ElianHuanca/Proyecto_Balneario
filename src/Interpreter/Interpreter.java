@@ -91,6 +91,10 @@ public class Interpreter implements Runnable{
             case Token.INGRESOS:
                 listener.ingresos(token_event);
                 break;
+            case Token.COMANDOS:
+                listener.comandos(token_event);
+                break;
+                
         }
         
     }

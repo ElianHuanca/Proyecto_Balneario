@@ -16,9 +16,9 @@ public class env {
     public static final String port = "5432";
     public static final String database = "balnearioDB";
     
-//    public static final String user = "grupo05sc";
-//    public static final String password = "grup005grup005";
+//    public static final String user = "grupo04sc";
+//    public static final String password = "grup004grup004";
 //    public static final String host = "mail.tecnoweb.org.bo";
 //    public static final String port = "5432";
-//    public static final String database = "db_grupo05sc";
+//    public static final String database = "db_grupo04sc";
 }

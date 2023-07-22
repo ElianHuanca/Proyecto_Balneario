@@ -12,21 +12,34 @@ CREATE DATABASE "balnearioDB"
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
   
-  
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS plpgsql;
+
 CREATE TABLE usuarios(
   id serial not null,
-  ci varchar(15),
+  ci varchar(15) unique,
   nombre varchar(50),
-  email varchar(100),
-  password varchar(50),
+  email varchar(100) unique,
+  password TEXT,
   fecha_nacimiento Date,
   rol varchar(25),
   CONSTRAINT PK_USUARIOS PRIMARY KEY(id)
 );
 
-INSERT INTO usuarios VALUES(1,'9648312','Elian Huanca','huancacori@gmail.com','123456','2000-05-02','Administrador');
-INSERT INTO usuarios VALUES(2,'7538307','Alvaro Arispe','Alvaro_Ar@gmail.com','123456','1998-12-04','Empleado');
-INSERT INTO usuarios VALUES(3,'9648307','Isela Huanca','isela_huanca@gmail.com','123456','1995-03-25','Cliente');
+INSERT INTO usuarios VALUES(1,'9648312','Elian Huanca','huancacori@gmail.com',crypt('123456', gen_salt('bf')),'2000-05-02','Administrador');
+INSERT INTO usuarios VALUES(2,'7538307','Aldo Huanca','Aldo_Huanca@gmail.com',crypt('123456', gen_salt('bf')),'1998-12-04','Empleado');
+INSERT INTO usuarios VALUES(3,'9648307','Isela Huanca','Isela_Huanca@gmail.com',crypt('123456', gen_salt('bf')),'1995-03-25','Empleado');
+INSERT INTO usuarios VALUES(4,'9648313','Diana Paniagua','Diana_Paniagua@gmail.com',crypt('123456', gen_salt('bf')),'1998-04-29','Cliente');
+INSERT INTO usuarios VALUES(5,'1648314','Mary Choque','Mary_Choque@gmail.com',crypt('123456', gen_salt('bf')),'1990-01-05','Cliente');
+INSERT INTO usuarios VALUES(6,'2648308','Juan Perez','Juan_Perez@gmail.com',crypt('123456', gen_salt('bf')),'1985-02-12','Cliente');
+INSERT INTO usuarios VALUES(7,'3648315','Maria Garcia','Maria_Garcia@gmail.com',crypt('123456', gen_salt('bf')),'1975-03-25','Cliente');
+INSERT INTO usuarios VALUES(8,'4648316','Carlos Rodriguez','Carlos_Rodriguez@gmail.com',crypt('123456', gen_salt('bf')),'1988-06-12','Cliente');
+INSERT INTO usuarios VALUES(9,'5648309','Ana Martinez','Ana_Martinez@gmail.com',crypt('123456', gen_salt('bf')),'1999-03-23','Cliente');
+INSERT INTO usuarios VALUES(10,'6648317','Luis Gonzalez','Luis_Gonzalez@gmail.com',crypt('123456', gen_salt('bf')),'1988-07-19','Cliente');
+INSERT INTO usuarios VALUES(11,'7648318','Laura Sanchez','Laura_Sanchez@gmail.com',crypt('123456', gen_salt('bf')),'1995-08-17','Cliente');
+INSERT INTO usuarios VALUES(12,'8648319','Jose Lopez','Jose_Lopez@gmail.com',crypt('123456', gen_salt('bf')),'1991-09-07','Cliente');
+INSERT INTO usuarios VALUES(13,'9648300','Sandra Ramirez','Sandra_Ramirez@gmail.com',crypt('123456', gen_salt('bf')),'1998-07-10','Cliente');
 
 CREATE TABLE tiposMembresias(
 	id serial not null,
@@ -36,6 +49,7 @@ CREATE TABLE tiposMembresias(
 	duracion varchar(50),
 	CONSTRAINT PK_TIPOSMEMBRESIAS PRIMARY KEY(id)
 );
+
 INSERT INTO tiposMembresias VALUES(1,'BRONCE','10 Entradas',150,'3 Meses');
 INSERT INTO tiposMembresias VALUES(2,'PLATA','15 Entradas, Descuento 30% De Alquier de ambiente',400,'6 Meses');
 INSERT INTO tiposMembresias VALUES(3,'ORO','20 Entradas, Descuento 30% De Alquier de ambiente, Descuento 40% De Consumi de Comida y Bebidas',800,'9 Meses');
@@ -60,15 +74,62 @@ CREATE TABLE membresias(
   CONSTRAINT FK_PAGOS FOREIGN KEY(idPago) REFERENCES pagos(id),
   CONSTRAINT FK_TIPOSMEMBRESIAS FOREIGN KEY(idTipoMembresia) REFERENCES tiposMembresias(id)
 );
-INSERT INTO pagos VALUES(1,'QR',150,'2023-06-30');
-INSERT INTO pagos VALUES(2,'Tarjeta Debito',400,'2023-09-30');
-INSERT INTO membresias VALUES(1,'2023-06-30','2023-09-30',3,1,1);
-INSERT INTO membresias VALUES(2,'2023-09-30','2024-03-30',3,2,2);
+
+CREATE OR REPLACE FUNCTION update_pago_monto()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE pagos
+  SET monto_total = (SELECT tiposMembresias.precio FROM tiposMembresias WHERE id = NEW.idTipoMembresia) 
+  WHERE id = NEW.idPago;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_monto_total
+AFTER INSERT ON membresias
+FOR EACH ROW
+EXECUTE FUNCTION update_pago_monto();
+
+CREATE OR REPLACE FUNCTION insertarPagosMembresias()
+RETURNS VOID AS $$
+DECLARE 
+  id INT;
+  idUsuario INT;
+  idTipoMembresia INT;
+  fecha DATE;
+  fechaFin DATE;
+  tipoPago VARCHAR(50);
+BEGIN
+  FOR id IN 1..50 LOOP
+    tipoPago := (SELECT valor_aleatorio FROM (VALUES ('QR'), ('Tarjeta Debito'), ('Tarjeta Credito')) AS valores(valor_aleatorio) ORDER BY random() LIMIT 1);
+    fecha := (SELECT fecha_aleatoria FROM generate_series('2023-06-01'::date, '2023-08-01'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
+    idTipoMembresia := (SELECT tiposMembresias.id FROM tiposMembresias ORDER BY RANDOM() LIMIT 1);
+    
+    IF idTipoMembresia = 1 THEN
+      fechaFin := fecha + INTERVAL '30 days';	
+    ELSIF idTipoMembresia = 2 THEN
+      fechaFin := fecha + INTERVAL '60 days';
+    ELSIF idTipoMembresia = 3 THEN
+      fechaFin := fecha + INTERVAL '90 days';
+    END IF;
+    
+    idUsuario := (SELECT usuarios.id FROM usuarios WHERE usuarios.rol = 'Cliente' ORDER BY RANDOM() LIMIT 1);
+    INSERT INTO pagos VALUES (id, tipoPago, 0, fecha);
+    INSERT INTO membresias VALUES (id, fecha, fechaFin, idUsuario,idTipoMembresia, id);
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insertarPagosMembresias();
+
+/*SELECT  tiposMembresias.nombre, COUNT(*) AS cantidad
+FROM membresias
+JOIN tiposMembresias ON membresias.idTipoMembresia = tiposMembresias.id
+GROUP BY tiposMembresias.nombre;*/
+
 
 CREATE TABLE ambientes(
   id serial not null,
   nombre varchar(150),
-  /*descripcion varchar(250),*/
   precio float,
   capacidad int,
   CONSTRAINT PK_AMBIENTES PRIMARY KEY(id)
@@ -85,16 +146,35 @@ CREATE TABLE reservas(
   fecha DATE,
   turno varchar(50),
   idUsuario int,
-	idPago int,
+  idPago int,
   CONSTRAINT PK_RESERVAS PRIMARY KEY(id),
   CONSTRAINT FK_USUARIOS FOREIGN KEY(idUsuario) REFERENCES usuarios(id),
 	CONSTRAINT FK_PAGOS FOREIGN KEY(idPago) REFERENCES pagos(id)
 );
 
-INSERT INTO pagos VALUES(3,'QR',650,'2023-06-30');
-INSERT INTO pagos VALUES(4,'Tarjeta Credito',365,'2023-07-05');
-INSERT INTO reservas VALUES(1,'2023-06-30','Mañana',3,3);
-INSERT INTO reservas VALUES(2,'2023-07-05','Noche',3,4);
+CREATE OR REPLACE FUNCTION insertarPagosReservas()
+RETURNS VOID AS $$
+DECLARE 
+  id INT;
+  idUsuario INT;
+  idPago INT;
+  fecha DATE;
+  turno VARCHAR(50);
+  tipoPago VARCHAR(50);
+BEGIN
+	idPago:=(SELECT MAX(pagos.id) FROM pagos)+1;	
+  FOR id IN 1..50 LOOP
+    tipoPago := (SELECT valor_aleatorio FROM (VALUES ('QR'), ('Tarjeta Debito'), ('Tarjeta Credito')) AS valores(valor_aleatorio) ORDER BY random() LIMIT 1);
+	turno := (SELECT valor_aleatorio FROM (VALUES ('Mañana'), ('Tarde'), ('Noche')) AS valores(valor_aleatorio) ORDER BY random() LIMIT 1);
+    fecha := (SELECT fecha_aleatoria FROM generate_series('2023-03-01'::date, '2023-08-01'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);  
+    idUsuario := (SELECT usuarios.id FROM usuarios WHERE usuarios.rol = 'Cliente' ORDER BY RANDOM() LIMIT 1);
+    INSERT INTO pagos VALUES (idPago, tipoPago, 0, fecha);
+    INSERT INTO reservas VALUES (id, fecha,turno, idUsuario, idPago);
+	idPago:=idPago+1;
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insertarPagosReservas();
 
 CREATE TABLE detalle_reservas(
 	id serial not null,
@@ -104,6 +184,15 @@ CREATE TABLE detalle_reservas(
 	CONSTRAINT FK_RESERVAS FOREIGN KEY(idReserva) REFERENCES reservas(id),
 	CONSTRAINT FK_AMBIENTES FOREIGN KEY(idAmbiente) REFERENCES ambientes(id)
 );
+CREATE OR REPLACE FUNCTION insertarPagosReservas()
+RETURNS VOID AS $$
+DECLARE 
+  id INT;
+BEGIN
+END;
+$$ LANGUAGE plpgsql;
+SELECT insertarPagosReservas();
+
 
 INSERT INTO detalle_reservas VALUES(1,1,1);
 INSERT INTO detalle_reservas VALUES(2,1,2);
@@ -150,9 +239,99 @@ CREATE TABLE ingresos(
 	ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO ingresos VALUES(1,'2023-07-17',3);
-INSERT INTO ingresos VALUES(2,'2023-07-18',3);
-INSERT INTO ingresos VALUES(3,'2023-07-19',3);
+CREATE OR REPLACE FUNCTION insertarIngresos()
+RETURNS VOID AS $$
+DECLARE 
+  id INT;idUsuario INT;fecha DATE;
+BEGIN
+	FOR id IN 1..50 LOOP
+		fecha := (SELECT fecha_aleatoria FROM generate_series('2023-06-01'::date, '2023-08-01'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
+		idUsuario:= (SELECT usuarios.id FROM usuarios WHERE usuarios.rol = 'Cliente' ORDER BY RANDOM() LIMIT 1);
+		INSERT INTO ingresos VALUES(id,fecha,idUsuario);
+	END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insertarIngresos();
+
+CREATE TABLE comandos(
+	id serial not null,
+	cu varchar(50),
+	accion varchar(50),
+	parametros text,
+	ejemplo text,
+	CONSTRAINT PK_COMANDOS PRIMARY KEY (id)
+);
+	
+INSERT INTO comandos VALUES(1,'usuarios','Registrar Usuario','ci, nombre, fecha_nacimiento, email, password, rol','usuarios post [9638521;Maicol;2000-02-02;maicol@gmail.com;123456;cliente]');
+INSERT INTO comandos VALUES(2,'usuarios','Editar Usuario ','id,ci, nombre, fecha_nacimiento, email, password, rol',' usuarios put [1;12345;Maicol;2000-02-02;maicol@gmail.com;123456;cliente]');
+INSERT INTO comandos VALUES(3,'usuarios','Eliminar Usuario','id','usuarios get ');
+INSERT INTO comandos VALUES(4,'usuarios','Obtener Usuario','ninguno','usuarios get(espacio)');
+
+
+INSERT INTO comandos VALUES(5,'tiposMembresias','Registrar tiposMembresias','nombre,descripcion,presio,duracion','tiposmembresias post [Diamante;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(6,'tiposMembresias','Editar tiposMembresias','id,nombre,descripcion,precio,duracion','tiposmembresias put [4;DINAMITA;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(7,'tiposMembresias','Eliminar tiposMembresias','id','tiposmembresias delete [4]');
+INSERT INTO comandos VALUES(8,'tiposMembresias','Obtener tiposMembresias','ninguno','tiposmembresias get(espacio)');
+
+INSERT INTO comandos VALUES(9,'MEMBRESIAS','Registrar Membresias','fecha_ini,fecha_fin,idUsuario,idTipoMembresia,idpago','membresias post [2023-02-01;2023-05-01;3;1]');
+INSERT INTO comandos VALUES(10,'MEMBRESIAS','Editar Membresias','id,fecha_ini,fecha_fin,idUsuario,idTipoMembresia,idpago','membresias put [3;2025-02-01;2025-05-01;3;1]');
+INSERT INTO comandos VALUES(11,'MEMBRESIAS','Eliminar Membresias','id','membresias delete [3]');
+INSERT INTO comandos VALUES(12,'MEMBRESIAS','Obtener Membresias','ninguno','membresias get(espacio)');
+
+
+INSERT INTO comandos VALUES(13,'AMBIENTES','Registrar AMBIENTES','nombre,precio,capacidad','ambientes post [Cancha De Futbol; 100; 12]');
+INSERT INTO comandos VALUES(14,'AMBIENTES','Editar AMBIENTES','id,nombre,precio,capacidad','ambientes put [6;Cancha De Tennis; 100; 12]');
+INSERT INTO comandos VALUES(15,'AMBIENTES','Eliminar AMBIENTES','id','ambientes delete [6]');
+INSERT INTO comandos VALUES(16,'AMBIENTES','Obtener AMBIENTES','ninguno','ambientes get(espacio)');
+
+
+INSERT INTO comandos VALUES(17,'RESERVAS','Registrar RESERVAS','fecha,turno,idUsuario,idPago','reservas post [2023-07-10;Tarde;3]');
+INSERT INTO comandos VALUES(18,'RESERVAS','Editar RESERVAS','id,fecha,turno,idUsuario,idPago',' reservas put [3;2024-07-10;Madrugada;3]');
+INSERT INTO comandos VALUES(19,'RESERVAS','Eliminar RESERVAS','id','reservas delete [3]');
+INSERT INTO comandos VALUES(20,'RESERVAS','Obtener RESERVAS','ninguno','reservas get(espacio)');
+
+
+INSERT INTO comandos VALUES(21,'DETALLE_RESERVAS','Registrar DETALLE_RESERVAS','idReserva,idAmbiente','detallereservas post [1;4]');
+INSERT INTO comandos VALUES(22,'DETALLE_RESERVAS','Editar DETALLE_RESERVAS',' id,idReserva,idAmbiente','detallereservas put [5;1;3]');
+INSERT INTO comandos VALUES(23,'DETALLE_RESERVAS','Eliminar DETALLE_RESERVAS','id','detallereservas delete [5]');
+INSERT INTO comandos VALUES(24,'DETALLE_RESERVAS','Obtener DETALLE_RESERVAS','ninguno','detallereservas get(espacio)');
+
+
+INSERT INTO comandos VALUES(25,'PRODUCTOS','Registrar PRODUCTOS','nombre,precio ','productos post [Coca Cola 2Lts; 10]');
+INSERT INTO comandos VALUES(26,'PRODUCTOS','Editar PRODUCTOS','id,nombre,precio ','productos put [5;Coca Cola 3Lts; 15]');
+INSERT INTO comandos VALUES(27,'PRODUCTOS','Eliminar PRODUCTOS','id','productos delete [5]');
+INSERT INTO comandos VALUES(28,'PRODUCTOS','Obtener PRODUCTOS','ninguno','productos get(espacio)');
+
+
+INSERT INTO comandos VALUES(29,'USOS','Registrar USOS','fecha,cantidad,idAmbiente,idProducto','usos post [2023-07-10;4;4;1]');
+INSERT INTO comandos VALUES(30,'USOS','Editar USOS','id,fecha,cantidad,idAmbiente,idProducto','usos put [5;2024-07-10;8;2;2]');
+INSERT INTO comandos VALUES(31,'USOS','Eliminar USOS','id','usos delete [5]');
+INSERT INTO comandos VALUES(32,'USOS','Obtener USOS','ninguno','usos get(espacio)');
+
+
+INSERT INTO comandos VALUES(33,'INGRESOS','Registrar INGRESOS','fecha,idUsuario','ingresos post [Diamante;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(34,'INGRESOS','Editar INGRESOS','id,fecha,idUsuario','ingresos put [4;DINAMITA;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(35,'INGRESOS','Eliminar INGRESOS','id','ingresos delete [4]');
+INSERT INTO comandos VALUES(36,'INGRESOS','Obtener INGRESOS','ninguno','ingresos get(espacio)');
+
+
+INSERT INTO comandos VALUES(37,'PAGOS','Registrar PAGOS','tipo_pago,monto_total,fecha','pagos post [Diamante;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(38,'PAGOS','Editar PAGOS','id,tipo_pago,monto_total,fecha','pagos put [4;DINAMITA;1000 Boletos;600;9 Meses]');
+INSERT INTO comandos VALUES(39,'PAGOS','Eliminar PAGOS','id','pagos delete [4]');
+INSERT INTO comandos VALUES(40,'PAGOS','Obtener PAGOS','ninguno','pagos get(espacio)');
+
+
+SELECT setval(pg_get_serial_sequence('usuarios', 'id'), coalesce(max(id), 0) + 1, false) FROM usuarios;
+SELECT setval(pg_get_serial_sequence('tiposMembresias', 'id'), coalesce(max(id), 0) + 1, false) FROM tiposMembresias;
+SELECT setval(pg_get_serial_sequence('membresias', 'id'), coalesce(max(id), 0) + 1, false) FROM membresias;
+SELECT setval(pg_get_serial_sequence('ambientes', 'id'), coalesce(max(id), 0) + 1, false) FROM ambientes;
+SELECT setval(pg_get_serial_sequence('reservas', 'id'), coalesce(max(id), 0) + 1, false) FROM reservas;
+SELECT setval(pg_get_serial_sequence('detalle_reservas', 'id'), coalesce(max(id), 0) + 1, false) FROM detalle_reservas;
+SELECT setval(pg_get_serial_sequence('productos', 'id'), coalesce(max(id), 0) + 1, false) FROM productos;
+SELECT setval(pg_get_serial_sequence('usos', 'id'), coalesce(max(id), 0) + 1, false) FROM usos;
+SELECT setval(pg_get_serial_sequence('ingresos', 'id'), coalesce(max(id), 0) + 1, false) FROM ingresos;
+SELECT setval(pg_get_serial_sequence('pagos', 'id'), coalesce(max(id), 0) + 1, false) FROM pagos;
+SELECT setval(pg_get_serial_sequence('comandos', 'id'), coalesce(max(id), 0) + 1, false) FROM comandos;
 
 SELECT * FROM usuarios;
 SELECT * FROM tiposMembresias;
@@ -164,7 +343,7 @@ SELECT * FROM productos;
 SELECT * FROM usos;
 SELECT * FROM ingresos; 
 SELECT * FROM pagos;
-
+SELECT * FROM comandos;
 
 DROP TABLE ingresos;
 DROP TABLE usos;
@@ -176,4 +355,4 @@ DROP TABLE membresias;
 DROP TABLE pagos;
 DROP TABLE tiposMembresias;
 DROP TABLE usuarios;
-
+DROP TABLE comandos;

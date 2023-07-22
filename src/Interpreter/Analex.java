@@ -81,7 +81,7 @@ public class Analex {
     }
 
     private boolean isLetter(char c){
-        return (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'));
+        return (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (164 == c));
     }
     
     private boolean isBeginParams(char c){

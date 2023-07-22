@@ -23,6 +23,7 @@ public interface ITokenEventListener {
     void productos(TokenEvent event);
     void usos(TokenEvent event);
     void ingresos(TokenEvent event);
-     
+    void comandos(TokenEvent event);
+   
     //agregar mas casos de uso
 }

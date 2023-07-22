@@ -32,6 +32,7 @@ public class Token {
     public static final int USOS = 107;    
     public static final int INGRESOS = 108;
     public static final int PAGOS = 109;
+    public static final int COMANDOS = 110;
     
     //ajustar de acuerdo a sus acciones con valores entre 200 a 299
     //Titulos de las acciones generales
@@ -45,6 +46,7 @@ public class Token {
     public static final int AGREGAR = 207;
     public static final int POST = 208;
     public static final int PUT = 209;    
+    public static final int GRAFICA = 210;    
     
     public static final int ERROR_COMMAND = 300;
     public static final int ERROR_CHARACTER = 301;
@@ -68,7 +70,7 @@ public class Token {
     public static final String LEXEME_USOS = "usos";
     public static final String LEXEME_INGRESOS = "ingresos";
     public static final String LEXEME_PAGOS = "pagos";        
-    
+    public static final String LEXEME_COMANDOS = "comandos";     
     
     //ajustar de acuerdo a sus acciones con valores en string
     //Titulos de las acciones generales en string
@@ -82,7 +84,7 @@ public class Token {
     public static final String LEXEME_AGREGAR = "agregar"; 
     public static final String LEXEME_POST = "post"; 
     public static final String LEXEME_PUT = "put";  
-    
+    public static final String LEXEME_GRAFICA = "grafica";  
     
     public static final String LEXEME_ERROR_COMMAND = "UNKNOWN COMMAND";
     public static final String LEXEME_ERROR_CHARACTER = "UNKNOWN CHARACTER";
@@ -208,7 +210,8 @@ public class Token {
                 return LEXEME_INGRESOS;
             case PAGOS :
                 return LEXEME_PAGOS;
-                
+            case COMANDOS :
+                return LEXEME_COMANDOS;
                 
             //ACCION
             case ADD:
@@ -229,7 +232,8 @@ public class Token {
                 return LEXEME_POST;
             case PUT:
                 return LEXEME_PUT;
-                
+            case GRAFICA:
+                return LEXEME_GRAFICA; 
                 
             case ERROR_COMMAND:
                 return LEXEME_ERROR_COMMAND;
@@ -281,7 +285,9 @@ public class Token {
                 return INGRESOS;
             case LEXEME_PAGOS:
                 return PAGOS;
-            
+            case LEXEME_COMANDOS:
+                return COMANDOS;
+                
             //ACTION    
             case LEXEME_ADD:
                 return ADD;
@@ -303,7 +309,8 @@ public class Token {
                 return POST;
             case LEXEME_PUT:
                 return PUT;
-               
+            case LEXEME_GRAFICA:
+                return GRAFICA;
                 
             case LEXEME_ERROR_COMMAND:
                 return ERROR_COMMAND;            

@@ -26,23 +26,24 @@ import utils.Email;
  * @author Elian
  */
 /*
-    private final static String PORT_SMTP = "25";
-    private final static String PROTOCOL = "smtp";
-    private final static String HOST = "mail.tecnoweb.org.bo";
-    private final static String USER = "grupo13sc";
-    private final static String PASSWORD = "grup013grup013";
-    private final static String MAIL = "grupo13sc@tecnoweb.org.bo";
-    private final static String MAIL_PASSWORD = "grup013grup013";
+    
     */
 
 public class SendEmailThread implements Runnable{
-    private final static String PORT_SMTP = "465";
-    private final static String PROTOCOL = "smtp";
-    private final static String HOST = "smtp.googlemail.com";
-    private final static String USER = "huancacori@gmail.com";
-    private final static String MAIL = "huancacori@gmail.com";
-    private final static String MAIL_PASSWORD = "twnygybhbovhvokb";
+//    private final static String PORT_SMTP = "465";
+//    private final static String PROTOCOL = "smtp";
+//    private final static String HOST = "smtp.googlemail.com";
+//    private final static String USER = "huancacori@gmail.com";
+//    private final static String MAIL = "huancacori@gmail.com";
+//    private final static String MAIL_PASSWORD = "twnygybhbovhvokb";
     
+    private final static String PORT_SMTP = "25";
+    private final static String PROTOCOL = "smtp";
+    private final static String HOST = "mail.tecnoweb.org.bo";
+    private final static String USER = "grupo04sc";
+//    private final static String PASSWORD = "grup013grup013";
+    private final static String MAIL = "grupo04sc@tecnoweb.org.bo";
+    private final static String MAIL_PASSWORD = "grup004grup004";
     
     private Email email;
     
@@ -57,8 +58,8 @@ public class SendEmailThread implements Runnable{
         properties.setProperty("mail.smtp.host", HOST);
         properties.setProperty("mail.smtp.port", PORT_SMTP);
         //properties.setProperty("mail.smtp.tls.enable", "true");//cuando user tecnoweb
-        properties.setProperty("mail.smtp.ssl.enable", "true");//cuando usen Gmail
-        properties.setProperty("mail.smtp.auth", "true");        
+        //properties.setProperty("mail.smtp.ssl.enable", "true");//cuando usen Gmail
+        //properties.setProperty("mail.smtp.auth", "true");        
         
         Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

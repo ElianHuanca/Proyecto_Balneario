@@ -22,7 +22,7 @@ import utils.DateString;
 public class DUsuarios {
 
     public static final String[] HEADERS = 
-        {"ID","CI","NOMBRE","FECHA NACIMIENTO", "EMAIL", "PASSWORD", "ROL"};
+        {"ID","CI","NOMBRE","FECHA NACIMIENTO", "EMAIL", "ROL"};
     
     private final SqlConnection connection;
 
@@ -32,7 +32,7 @@ public class DUsuarios {
 
     public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
         String query = "INSERT INTO usuarios(ci,nombre,fecha_nacimiento,email,password,rol)"
-                + "values(?,?,?,?,?,?)";
+                + "values(?,?,?,?,crypt(?, gen_salt('bf')),?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);        
 
@@ -40,7 +40,7 @@ public class DUsuarios {
         ps.setString(2, nombre);
         ps.setDate(3, DateString.StringToDateSQL(fecha_nacimiento));
         ps.setString(4, email);
-        ps.setString(5, encriptar(password));
+        ps.setString(5, password);
         ps.setString(6, rol);
 
         if (ps.executeUpdate() == 0) {
@@ -95,7 +95,6 @@ public class DUsuarios {
                 set.getString("nombre"),
                 set.getString("fecha_nacimiento"),
                 set.getString("email"),
-                set.getString("password"),
                 set.getString("rol")
             });
         }
@@ -116,7 +115,6 @@ public class DUsuarios {
                 set.getString("nombre"),
                 set.getString("fecha_nacimiento"),
                 set.getString("email"),
-                set.getString("password"),
                 set.getString("rol")
             };
         }
@@ -143,20 +141,4 @@ public class DUsuarios {
         }
     }
 
-    private String encriptar(String frase) {
-        String letra = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789";
-        String clave = "";
-        frase = frase.toUpperCase();
-        for (int i = 0; i < frase.length(); i++) {
-            char c = frase.charAt(i);
-            int pos = letra.indexOf(c);
-            if (pos == -1) {
-                clave = clave + c;
-            } else {
-                clave = clave + letra.charAt((pos + 3) % letra.length());
-
-            }
-        }
-        return clave;
-    }
 }

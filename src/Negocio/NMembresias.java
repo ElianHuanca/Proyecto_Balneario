@@ -51,4 +51,10 @@ public class NMembresias {
         dMembresias.desconectar();
         return usuarios;
     }
+    
+    public ArrayList<String[]> listarGrafica() throws SQLException{
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dMembresias.listarGrafica();
+        dMembresias.desconectar();
+        return usuarios;
+    }
 }

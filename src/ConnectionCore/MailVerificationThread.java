@@ -33,8 +33,8 @@ public class MailVerificationThread implements Runnable {
     
     private final static int PORT_POP = 110;
     private final static String HOST = "mail.tecnoweb.org.bo";
-    private final static String USER = "grupo05sc";
-    private final static String PASSWORD = "grup005grup005";
+    private final static String USER = "grupo04sc";
+    private final static String PASSWORD = "grup004grup004";
     
     private Socket socket;
     private BufferedReader input;
