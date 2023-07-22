@@ -32,8 +32,9 @@ public class DUsuarios {
 
     public void guardar(String ci, String nombre, String fecha_nacimiento, String email, String password, String rol) throws SQLException, ParseException {
         String query = "INSERT INTO usuarios(ci,nombre,fecha_nacimiento,email,password,rol)"
-                + "values(?,?,?,?,crypt(?, gen_salt('bf')),?)";
-
+                + "values(?,?,?,?,?,?)";
+                //+ "values(?,?,?,?,crypt(?, gen_salt('bf')),?)";
+                    
         PreparedStatement ps = connection.connect().prepareStatement(query);        
 
         ps.setString(1, ci);

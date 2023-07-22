@@ -51,4 +51,10 @@ public class NAmbientes {
         dAmbientes.desconectar();
         return usuarios;
     }
+    
+    public ArrayList<String[]> listarGrafica() throws SQLException{
+        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dAmbientes.listarGrafica();
+        dAmbientes.desconectar();
+        return usuarios;
+    }
 }

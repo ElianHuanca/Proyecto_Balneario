@@ -29,7 +29,7 @@ public class DPagos {
     }
 
     public void guardar( String tipo_pago, float monto_total, String fecha ) throws SQLException, ParseException {
-        String query = "INSERT INTO pagos( tipo_pago,monto_total,fecha )"
+        String query = "INSERT INTO pagos( tipo_pago,monto_total,fecha)"
                 + "values(?,?,?)";
 
         PreparedStatement ps = connection.connect().prepareStatement(query);

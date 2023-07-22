@@ -444,6 +444,11 @@ public class ConnectionCore {
             public void comandos(TokenEvent event) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
+
+            @Override
+            public void help(TokenEvent event) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         });
 
         Thread thread = new Thread(interpreter);

@@ -1,19 +1,4 @@
--- Database: balnearioDB
-
--- DROP DATABASE IF EXISTS "balnearioDB";
-
-CREATE DATABASE "balnearioDB"
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'Spanish_Bolivia.1252'
-    LC_CTYPE = 'Spanish_Bolivia.1252'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;
-  
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+--CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS plpgsql;
 
 CREATE TABLE usuarios(
@@ -27,19 +12,19 @@ CREATE TABLE usuarios(
   CONSTRAINT PK_USUARIOS PRIMARY KEY(id)
 );
 
-INSERT INTO usuarios VALUES(1,'9648312','Elian Huanca','huancacori@gmail.com',crypt('123456', gen_salt('bf')),'2000-05-02','Administrador');
-INSERT INTO usuarios VALUES(2,'7538307','Aldo Huanca','Aldo_Huanca@gmail.com',crypt('123456', gen_salt('bf')),'1998-12-04','Empleado');
-INSERT INTO usuarios VALUES(3,'9648307','Isela Huanca','Isela_Huanca@gmail.com',crypt('123456', gen_salt('bf')),'1995-03-25','Empleado');
-INSERT INTO usuarios VALUES(4,'9648313','Diana Paniagua','Diana_Paniagua@gmail.com',crypt('123456', gen_salt('bf')),'1998-04-29','Cliente');
-INSERT INTO usuarios VALUES(5,'1648314','Mary Choque','Mary_Choque@gmail.com',crypt('123456', gen_salt('bf')),'1990-01-05','Cliente');
-INSERT INTO usuarios VALUES(6,'2648308','Juan Perez','Juan_Perez@gmail.com',crypt('123456', gen_salt('bf')),'1985-02-12','Cliente');
-INSERT INTO usuarios VALUES(7,'3648315','Maria Garcia','Maria_Garcia@gmail.com',crypt('123456', gen_salt('bf')),'1975-03-25','Cliente');
-INSERT INTO usuarios VALUES(8,'4648316','Carlos Rodriguez','Carlos_Rodriguez@gmail.com',crypt('123456', gen_salt('bf')),'1988-06-12','Cliente');
-INSERT INTO usuarios VALUES(9,'5648309','Ana Martinez','Ana_Martinez@gmail.com',crypt('123456', gen_salt('bf')),'1999-03-23','Cliente');
-INSERT INTO usuarios VALUES(10,'6648317','Luis Gonzalez','Luis_Gonzalez@gmail.com',crypt('123456', gen_salt('bf')),'1988-07-19','Cliente');
-INSERT INTO usuarios VALUES(11,'7648318','Laura Sanchez','Laura_Sanchez@gmail.com',crypt('123456', gen_salt('bf')),'1995-08-17','Cliente');
-INSERT INTO usuarios VALUES(12,'8648319','Jose Lopez','Jose_Lopez@gmail.com',crypt('123456', gen_salt('bf')),'1991-09-07','Cliente');
-INSERT INTO usuarios VALUES(13,'9648300','Sandra Ramirez','Sandra_Ramirez@gmail.com',crypt('123456', gen_salt('bf')),'1998-07-10','Cliente');
+INSERT INTO usuarios VALUES(1,'9648312','Elian Huanca','huancacori@gmail.com','123456','2000-05-02','Administrador');
+INSERT INTO usuarios VALUES(2,'7538307','Aldo Huanca','Aldo_Huanca@gmail.com','123456','1998-12-04','Empleado');
+INSERT INTO usuarios VALUES(3,'9648307','Isela Huanca','Isela_Huanca@gmail.com','123456','1995-03-25','Empleado');
+INSERT INTO usuarios VALUES(4,'9648313','Diana Paniagua','Diana_Paniagua@gmail.com','123456','1998-04-29','Cliente');
+INSERT INTO usuarios VALUES(5,'1648314','Mary Choque','Mary_Choque@gmail.com','123456','1990-01-05','Cliente');
+INSERT INTO usuarios VALUES(6,'2648308','Juan Perez','Juan_Perez@gmail.com','123456','1985-02-12','Cliente');
+INSERT INTO usuarios VALUES(7,'3648315','Maria Garcia','Maria_Garcia@gmail.com','123456','1975-03-25','Cliente');
+INSERT INTO usuarios VALUES(8,'4648316','Carlos Rodriguez','Carlos_Rodriguez@gmail.com','123456','1988-06-12','Cliente');
+INSERT INTO usuarios VALUES(9,'5648309','Ana Martinez','Ana_Martinez@gmail.com','123456','1999-03-23','Cliente');
+INSERT INTO usuarios VALUES(10,'6648317','Luis Gonzalez','Luis_Gonzalez@gmail.com','123456','1988-07-19','Cliente');
+INSERT INTO usuarios VALUES(11,'7648318','Laura Sanchez','Laura_Sanchez@gmail.com','123456','1995-08-17','Cliente');
+INSERT INTO usuarios VALUES(12,'8648319','Jose Lopez','Jose_Lopez@gmail.com','123456','1991-09-07','Cliente');
+INSERT INTO usuarios VALUES(13,'9648300','Sandra Ramirez','Sandra_Ramirez@gmail.com','123456','1998-07-10','Cliente');
 
 CREATE TABLE tiposMembresias(
 	id serial not null,
@@ -309,14 +294,14 @@ INSERT INTO comandos VALUES(9,'MEMBRESIAS','Registrar Membresias','fecha_ini,fec
 INSERT INTO comandos VALUES(10,'MEMBRESIAS','Editar Membresias','id,fecha_ini,fecha_fin,idUsuario,idTipoMembresia,idpago','membresias put [1;2025-02-01;2025-05-01;3;1;1]');
 INSERT INTO comandos VALUES(11,'MEMBRESIAS','Eliminar Membresias','id','membresias delete [51]');
 INSERT INTO comandos VALUES(12,'MEMBRESIAS','Obtener Membresias','ninguno','membresias get');
-INSERT INTO comandos VALUES(41,'MEMBRESIAS','Obtener Membresias','ninguno','membresias grafica');
+INSERT INTO comandos VALUES(41,'MEMBRESIAS','Grafica De Membresias','ninguno','membresias grafica');
 SELECT * FROM membresias;
 
 INSERT INTO comandos VALUES(13,'AMBIENTES','Registrar AMBIENTES','nombre,precio,capacidad','ambientes post [Cancha De Futbol; 100; 12]');
 INSERT INTO comandos VALUES(14,'AMBIENTES','Editar AMBIENTES','id,nombre,precio,capacidad','ambientes put [6;Cancha De Tennis; 100; 12]');
 INSERT INTO comandos VALUES(15,'AMBIENTES','Eliminar AMBIENTES','id','ambientes delete [6]');
 INSERT INTO comandos VALUES(16,'AMBIENTES','Obtener AMBIENTES','ninguno','ambientes get');
-INSERT INTO comandos VALUES(42,'AMBIENTES','Obtener AMBIENTES','ninguno','ambientes grafica');
+INSERT INTO comandos VALUES(42,'AMBIENTES','Grafica De AMBIENTES','ninguno','ambientes grafica');
 SELECT * FROM ambientes;
 
 INSERT INTO comandos VALUES(17,'RESERVAS','Registrar RESERVAS','fecha,turno,idUsuario,idPago','reservas post [2023-07-10;Tarde;3;1]');

@@ -124,28 +124,28 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                         HtmlBuilder.generateText(new String[]{
                     "Comando desconocido",
                     "No se pudo ejecutar el comando [" + args.get(0) + "] debido a: ",
-                    "No se reconoce la palabra \"" + args.get(1) + "\" como un comando válido"
+                    "No se reconoce la palabra \"" + args.get(1) + "\" como un comando vÃ¡lido"
                 }));
                 break;
             case CONSTRAINTS_ERROR:
                 emailObject = new Email(email, Email.SUBJECT,
                         HtmlBuilder.generateText(new String[]{
                     "Error al interactuar con la base de datos",
-                    "Referencia a información inexistente"
+                    "Referencia a informaciÃ³n inexistente"
                 }));
                 break;
             case NUMBER_FORMAT_ERROR:
                 emailObject = new Email(email, Email.SUBJECT,
                         HtmlBuilder.generateText(new String[]{
-                    "Error en el tipo de parámetro",
-                    "El tipo de uno de los parámetros es incorrecto"
+                    "Error en el tipo de parÃ¡metro",
+                    "El tipo de uno de los parÃ¡metros es incorrecto"
                 }));
                 break;
             case INDEX_OUT_OF_BOUND_ERROR:
                 emailObject = new Email(email, Email.SUBJECT,
                         HtmlBuilder.generateText(new String[]{
-                    "Cantidad de parámetros incorrecta",
-                    "La cantidad de parámetros para realizar la acción es incorrecta"
+                    "Cantidad de parÃ¡metros incorrecta",
+                    "La cantidad de parÃ¡metros para realizar la acciÃ³n es incorrecta"
                 }));
                 break;
             case PARSE_ERROR:
@@ -159,7 +159,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                 emailObject = new Email(email, Email.SUBJECT,
                         HtmlBuilder.generateText(new String[]{
                     "Acceso denegado",
-                    "Usted no posee los permisos necesarios para realizar la acción solicitada"
+                    "Usted no posee los permisos necesarios para realizar la acciÃ³n solicitada"
                 }));
                 break;
         }
@@ -169,7 +169,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
     private void simpleNotifySuccess(String email, String message) {
         Email emailObject = new Email(email, Email.SUBJECT,
                 HtmlBuilder.generateText(new String[]{
-            "Petición realizada correctamente",
+            "Peticion realizada correctamente",
             message
         }));
         sendEmail(emailObject);
@@ -184,6 +184,12 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
     }
 
     private void tableNotifySuccess(String email, String title, String[] headers, ArrayList<String[]> data) {
+        Email emailObject = new Email(email, Email.SUBJECT,
+                HtmlBuilder.generateTable(title, headers, data));
+        sendEmail(emailObject);
+    }
+    
+    private void tableNotifySuccess2(String email, String title, String[] headers, ArrayList<String[]> data) {
         Email emailObject = new Email(email, Email.SUBJECT,
                 HtmlBuilder.generateTable(title, headers, data));
         sendEmail(emailObject);
@@ -215,8 +221,8 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                 case Token.GET:
                     tableNotifySuccess(event.getSender(), "Lista de Usuarios", DUsuarios.HEADERS, nUsuarios.listar());
                     break;
-                case Token.POST:
-                    nUsuarios.guardar(event.getParams());
+                case Token.POST:                    
+                    nUsuarios.guardar(event.getParams());                    
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Usuario Guardado Correctamente");
                     break;
@@ -281,7 +287,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
         try {
             switch (event.getAction()) {
                 case Token.GET:
-                    tableNotifySuccess(event.getSender(), "Lista de Membresias", DMembresias.HEADERS, nMembresias.listar());                   
+                    tableNotifySuccess(event.getSender(), "Lista de Membresias", DMembresias.HEADERS, nMembresias.listar());
                     break;
                 case Token.POST:
                     nMembresias.guardar(event.getParams());
@@ -299,7 +305,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Membresia Eliminado Correctamente");
                     break;
                 case Token.GRAFICA:
-                    tableGraficaSuccess(event.getSender(), "Grafica De Consumo De Membresias", nMembresias.listarGrafica());
+                    tableGraficaSuccess(event.getSender(), "Grafica De Compras De Membresias", nMembresias.listarGrafica());
                     break;
             }
         } catch (NumberFormatException ex) {
@@ -336,7 +342,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     simpleNotifySuccess(event.getSender(), "Ambiente Eliminado Correctamente");
                     break;
                 case Token.GRAFICA:
-                    tableGraficaSuccess(event.getSender(), "Grafica De Reservas De Ambientes", nMembresias.listarGrafica());
+                    tableGraficaSuccess(event.getSender(), "Grafica De Reservas De Ambientes", nAmbientes.listarGrafica());
                     break;
             }
         } catch (NumberFormatException ex) {
@@ -494,7 +500,7 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
                     tableNotifySuccess(event.getSender(), "Lista de Ingresos", DIngresos.HEADERS, nIngresos.listar());
                     break;
                 case Token.POST:
-                    nIngresos.guardar(event.getParams(), event.getSender());
+                    nIngresos.guardar(event.getParams());
                     System.out.println("Guardado con exito");
                     simpleNotifySuccess(event.getSender(), "Ingreso Guardado Correctamente");
                     break;
@@ -568,5 +574,14 @@ public class MailApplication implements IEmailEventListener, ITokenEventListener
         } catch (SQLException ex) {
             Logger.getLogger(MailApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void help(TokenEvent event) {
+        try {                
+            tableNotifySuccess(event.getSender(), "Lista De Comandos", DComandos.HEADERS, nComandos.listar());
+        } catch (SQLException ex) {
+            Logger.getLogger(MailApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 }

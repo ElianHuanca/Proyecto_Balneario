@@ -17,41 +17,43 @@ import java.util.List;
  * @author ELIAN
  */
 public class NIngresos {
+
     private DIngresos dIngreso;
-    private DUsuarios dUsuario;
+    // private DUsuarios dUsuario;
 
-    public NIngresos(){
+    public NIngresos() {
         dIngreso = new DIngresos();
-        dUsuario = new DUsuarios();
+        //dUsuario = new DUsuarios();
     }
-    //no incluimos al id
-    public void guardar(List<String> parametros, String email) throws SQLException, ParseException {
-        int usuarioId = dUsuario.getIdByEmail(email);
-        if(usuarioId != -1){
-            dIngreso.guardar(parametros.get(0), usuarioId);
-            dIngreso.desconectar();
-        }
-        dUsuario.desconectar();
-    }  
 
-    public void modificar(List<String> parametros) throws SQLException, ParseException{
+    //no incluimos al id
+    public void guardar(List<String> parametros) throws SQLException, ParseException {
+        //int usuarioId = dUsuario.getIdByEmail(email);  
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
-        dIngreso.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1),Integer.parseInt(parametros.get(2)));
+        dIngreso.guardar(parametros.get(0), Integer.parseInt(parametros.get(1)));
         dIngreso.desconectar();
     }
-    
-    public void eliminar(List<String> parametros) throws SQLException{
+
+    public void modificar(List<String> parametros) throws SQLException, ParseException {
+        if (parametros.isEmpty()) {
+            throw new SQLException("Parametros vacios!");
+        }
+        dIngreso.modificar(Integer.parseInt(parametros.get(0)), parametros.get(1), Integer.parseInt(parametros.get(2)));
+        dIngreso.desconectar();
+    }
+
+    public void eliminar(List<String> parametros) throws SQLException {
         if (parametros.isEmpty()) {
             throw new SQLException("Parametros vacios!");
         }
         dIngreso.eliminar(Integer.parseInt(parametros.get(0)));
         dIngreso.desconectar();
     }
-    
-    public ArrayList<String[]> listar() throws SQLException{
-        ArrayList<String[]> usuarios =  (ArrayList<String[]>) dIngreso.listar();
+
+    public ArrayList<String[]> listar() throws SQLException {
+        ArrayList<String[]> usuarios = (ArrayList<String[]>) dIngreso.listar();
         dIngreso.desconectar();
         return usuarios;
     }

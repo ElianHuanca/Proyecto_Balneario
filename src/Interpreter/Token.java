@@ -33,6 +33,7 @@ public class Token {
     public static final int INGRESOS = 108;
     public static final int PAGOS = 109;
     public static final int COMANDOS = 110;
+    public static final int HELP = 111;
     
     //ajustar de acuerdo a sus acciones con valores entre 200 a 299
     //Titulos de las acciones generales
@@ -71,6 +72,7 @@ public class Token {
     public static final String LEXEME_INGRESOS = "ingresos";
     public static final String LEXEME_PAGOS = "pagos";        
     public static final String LEXEME_COMANDOS = "comandos";     
+    public static final String LEXEME_HELP = "help";     
     
     //ajustar de acuerdo a sus acciones con valores en string
     //Titulos de las acciones generales en string
@@ -212,6 +214,8 @@ public class Token {
                 return LEXEME_PAGOS;
             case COMANDOS :
                 return LEXEME_COMANDOS;
+            case HELP :
+                return LEXEME_HELP;
                 
             //ACCION
             case ADD:
@@ -287,6 +291,8 @@ public class Token {
                 return PAGOS;
             case LEXEME_COMANDOS:
                 return COMANDOS;
+            case LEXEME_HELP:
+                return HELP;
                 
             //ACTION    
             case LEXEME_ADD:
